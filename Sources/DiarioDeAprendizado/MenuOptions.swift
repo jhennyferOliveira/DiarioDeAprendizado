@@ -20,11 +20,9 @@ protocol MenuOptionsDelegate: class {
 }
 
 public class MenuOptions: MenuOptionsDelegate {
-    let folderPath = FileManager.default.homeDirectoryForCurrentUser
-    .appendingPathComponent("Desktop/myFolder")
-    let completePathDisciplinas = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent("Desktop/myFolder")
-        .appendingPathComponent("disciplina.txt")
+    let folderPath = FileManager.default.currentDirectoryPath + "/json"
+    let completePathDisciplinas = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
+
     
     func createNewGrade() {
         
@@ -32,8 +30,8 @@ public class MenuOptions: MenuOptionsDelegate {
         
         var disciplina = Disciplina()
         disciplina.nome = "Algebra Linear"
-        disciplina.nota1 = "10" 
-        
+        disciplina.nota1 = "10"
+        print(completePathDisciplinas)
         service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
