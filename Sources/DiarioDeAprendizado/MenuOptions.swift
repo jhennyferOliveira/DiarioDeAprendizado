@@ -22,6 +22,7 @@ protocol MenuOptionsDelegate: class {
 public class MenuOptions: MenuOptionsDelegate {
     let folderPath = FileManager.default.homeDirectoryForCurrentUser
     .appendingPathComponent("Desktop/myFolder")
+
     let completePathDisciplinas = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("Desktop/myFolder")
         .appendingPathComponent("disciplina.txt")
@@ -83,7 +84,16 @@ public class MenuOptions: MenuOptionsDelegate {
     }
     
     func createNewDiary() {
-        // let service = Service<Diario>()
+
+        let service = Service<Diario>()
+        var diario = Diario()
+        var disciplina = Disciplina()
+        disciplina.nome = "matematica"
+        diario.titulo = "Programação Orientada a Objetos"
+        diario.anotacao = "hoje aprendi bla bla bla"
+        diario.disciplina = disciplina
+        service.override(object: diario, folderPath: folderPath, fileName: "diario.txt")
+        print("Diario foi criado")
     }
     
     
