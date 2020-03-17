@@ -29,9 +29,26 @@ public class MenuOptions: MenuOptionsDelegate {
         let service = Service<Disciplina>()
         
         var disciplina = Disciplina()
-        disciplina.nome = "Algebra Linear"
-        disciplina.nota1 = "10"
-        print(completePathDisciplinas)
+        print("digite o nome da disciplina:")
+        guard let nome = readLine() else {
+            return
+        }
+        print("ja possui nota ? (s/n)")
+        guard let response = readLine() else { return }
+        if response == "s" {
+            print("digite sua n1:")
+            guard let n1 = readLine() else { return }
+            disciplina.nota1 = n1
+            
+            print("digite sua n2:")
+            guard let n2 = readLine() else { return }
+            disciplina.nota2 = n2
+        }
+        disciplina.nome = nome
+        disciplina.nota1 = "-"
+        disciplina.nota2 = "-"
+
+        
         service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
@@ -41,8 +58,8 @@ public class MenuOptions: MenuOptionsDelegate {
         let formatter = DateFormatter()
         let searchScreen = ScreenSearchDiary()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        let myStringDate = formatter.string(from: date)
-        print("\u{001B}[2J") // clear terminal standalone
+        let myStringDate = formatter.string(from: Date())
+//        print("\u{001B}[2J") // clear terminal standalone
         searchScreen.show()
         while let input = readLine() {
             
@@ -81,7 +98,7 @@ public class MenuOptions: MenuOptionsDelegate {
     }
     
     func createNewDiary() {
-
+        
         let service = Service<Diario>()
         var diario = Diario()
         var disciplina = Disciplina()
@@ -98,7 +115,7 @@ public class MenuOptions: MenuOptionsDelegate {
         let service = Service<Disciplina>()
         let disciplinas = service.read(filePath: completePathDisciplinas)
         disciplinas.enumerated().forEach { (index, disciplina) in
-            print("\(index) \(disciplina.nome)")
+            print("\(index) - \(disciplina.nome)")
         }
     }
     
