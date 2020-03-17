@@ -10,8 +10,8 @@ import Foundation
 
 public struct Disciplina: Codable {
     var nome: String = ""
-    var nota1: String? = nil
-    var nota2: String? = nil
+    var nota1: String? = "-"
+    var nota2: String? = "-"
     var frequencia: String? = nil
     var links: String? = nil
 }

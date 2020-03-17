@@ -45,10 +45,7 @@ public class MenuOptions: MenuOptionsDelegate {
             disciplina.nota2 = n2
         }
         disciplina.nome = nome
-        disciplina.nota1 = "-"
-        disciplina.nota2 = "-"
-
-        
+    
         service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
