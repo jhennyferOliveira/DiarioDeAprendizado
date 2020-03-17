@@ -1,0 +1,17 @@
+//
+//  Disciplina.swift
+//  testeCLI
+//
+//  Created by Vinicius Mesquita on 14/03/20.
+//  Copyright © 2020 Vinicius Mesquita. All rights reserved.
+//
+
+import Foundation
+
+public struct Disciplina: Codable {
+    var nome: String = ""
+    var nota1: String? = nil
+    var nota2: String? = nil
+    var frequencia: String? = nil
+    var links: String? = nil
+}
