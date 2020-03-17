@@ -9,9 +9,9 @@
 import Foundation
 
 public struct Diario: Codable {
-    var titulo: String
-    var anotacao: String
-    var data: String
-    var categoria: String
-    var disciplina: Disciplina
+    var titulo: String = ""
+    var anotacao: String? = nil
+    var data: String? = nil
+    var categoria: String? = nil
+    var disciplina: Disciplina = Disciplina()
 }
