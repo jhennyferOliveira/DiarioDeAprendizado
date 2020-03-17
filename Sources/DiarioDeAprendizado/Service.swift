@@ -16,11 +16,11 @@ public final class Service<Type: Codable> {
     
     var arrayObject = [Type]()
     
-    func read(filePath: URL) -> [Type] {
+    func read(filePath: String) -> [Type] {
         var arrayType = [Type]()
-        if fileManager.fileExists(atPath: filePath.relativePath) {
+        if fileManager.fileExists(atPath: filePath) {
             do {
-                let json = try String(contentsOf: filePath)
+                let json = try String(contentsOf: URL(fileURLWithPath: filePath))
                 let jsonData = json.data(using: .utf8)!
                 
                 arrayType = try decoder.decode([Type].self, from: jsonData)
@@ -32,23 +32,23 @@ public final class Service<Type: Codable> {
         return arrayType
     }
     
-    func write(filePath: URL) {
+    func write(filePath: String) {
         do { // write
             let jsonData = try encoder.encode(arrayObject)
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-                try jsonString.write(to: filePath, atomically: true, encoding: .utf8)
+                try jsonString.write(to: URL(fileURLWithPath: filePath), atomically: true, encoding: .utf8)
             }
         } catch {
             print(error.localizedDescription)
         }
     }
 
-    func override(object: Type, folderPath: URL, fileName: String) {
+    func override(object: Type, folderPath: String, fileName: String) {
         
         encoder.outputFormatting = .prettyPrinted
-        let filePath = folderPath.appendingPathComponent(fileName)
+        let filePath = folderPath + "/\(fileName)"
         
-        if fileManager.fileExists(atPath: filePath.relativePath) {
+        if fileManager.fileExists(atPath: filePath) {
             do { // read & append
                 arrayObject = read(filePath: filePath)
                 arrayObject.append(object)
@@ -65,12 +65,13 @@ public final class Service<Type: Codable> {
         
     }
     
-    private func createDirectory(folderPath: URL, fileName: String) {
+    private func createDirectory(folderPath: String, fileName: String) {
         do {
-            try fileManager.createDirectory(atPath: folderPath.relativePath, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.createDirectory(atPath: folderPath, withIntermediateDirectories: true, attributes: nil)
             let jsonData = try encoder.encode(arrayObject)
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-                try jsonString.write(to: folderPath.appendingPathComponent(fileName), atomically: true, encoding: .utf8)
+                let url = URL(fileURLWithPath: folderPath + "/\(fileName)")
+                try jsonString.write(to: url, atomically: true, encoding: .utf8)
             }
         }
         catch {
