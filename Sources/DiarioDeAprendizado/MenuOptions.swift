@@ -45,7 +45,7 @@ public class MenuOptions: MenuOptionsDelegate {
             disciplina.nota2 = n2
         }
         disciplina.nome = nome
-    
+        print(completePathDisciplinas)
         service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
@@ -111,9 +111,13 @@ public class MenuOptions: MenuOptionsDelegate {
     func showGrades() {
         let service = Service<Disciplina>()
         let disciplinas = service.read(filePath: completePathDisciplinas)
+        print("--------------------------------------")
+        print("estas sao as disciplinas cadastradas: \n")
         disciplinas.enumerated().forEach { (index, disciplina) in
             print("\(index) - \(disciplina.nome)")
+           
         }
+        print("--------------------------------------\n\n")
     }
     
 }
