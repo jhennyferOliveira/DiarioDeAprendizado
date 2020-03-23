@@ -56,6 +56,7 @@ public class MenuOptions: MenuOptionsDelegate {
     
     func searchDiary() {
         let searchScreen = ScreenSearchDiary()
+        let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
         let myStringDate = formatter.string(from: Date())
 //        print("\u{001B}[2J") // clear terminal standalone
@@ -85,10 +86,6 @@ public class MenuOptions: MenuOptionsDelegate {
         }
     }
 
-//    func searchGrade(){
-//
-//    }
-    
     func showDiaries() {
         let service = Service<Diario>()
         let diarios = service.read(filePath: completePathDisciplinas)
@@ -108,6 +105,9 @@ public class MenuOptions: MenuOptionsDelegate {
         let service = Service<Diario>()
         var diario = Diario()
         var disciplina = Disciplina()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        let stringData = formatter.string(from: Date())
       
         print("Digite o nome da disciplina: ")
         guard let nomeDisciplina = readLine() else {
@@ -129,17 +129,17 @@ public class MenuOptions: MenuOptionsDelegate {
             return
         }
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
-        let stringData = formatter.string(from: Date())
-
         diario.data = stringData
         diario.titulo = tituloAnotacao
         diario.categoria = categoria
         diario.anotacao = anotacao
+
         if let disciplinaProcurada = searchGradeByName(nome: nomeDisciplina){
             diario.disciplina = disciplinaProcurada
-        } else{
+        } else {
+            let serviceDisciplina = Service<Disciplina>()
+            disciplina.nome = nomeDisciplina
+            serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
         service.override(object: diario, folderPath: folderPath, fileName: "diario.txt")
