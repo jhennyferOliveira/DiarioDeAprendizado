@@ -16,16 +16,17 @@ enum SearchDiaryOptions {
 
 public class ScreenSearchDiary {
     
+     weak var delegate: DiaryOptionsDelegate?
     var options = SearchDiaryOptions.nome
     
     func run() {
         switch options {
         case .data:
-            print("pesquisar por data")
+            delegate?.searchByDate()
         case .disciplina:
-            print("pesquisar por discplina")
+            delegate?.searchByGrade()
         case .nome:
-            print("pesquisar por nome")
+            delegate?.searchByName()
         }
     }
     
@@ -37,5 +38,4 @@ public class ScreenSearchDiary {
         3 - pesquisar por disciplina
         """)
     }
-    
 }

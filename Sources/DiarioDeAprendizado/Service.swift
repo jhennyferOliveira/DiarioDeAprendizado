@@ -61,8 +61,16 @@ public final class Service<Type: Codable> {
         }
     }
     
-    func delete() {
-        
+    func delete(filePath: String) {
+        if fileManager.fileExists(atPath: filePath) {
+            do {
+                try fileManager.removeItem(atPath: filePath)
+           } catch {
+            print(error.localizedDescription)
+           }
+        } else {
+            print("arquivo não existe")
+        }
     }
     
     private func createDirectory(folderPath: String, fileName: String) {
@@ -78,4 +86,5 @@ public final class Service<Type: Codable> {
             print(error.localizedDescription)
         }
     }
+    
 }

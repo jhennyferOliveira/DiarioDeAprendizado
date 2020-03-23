@@ -14,11 +14,11 @@ menu.delegate = options
 
 menu.show()
 while let input = readLine() {
-    
+
     guard input != "quit" else {
         break
     }
-    
+
     switch input {
     case "1":
         menu.options = .showGrades
@@ -36,11 +36,10 @@ while let input = readLine() {
         menu.options = .searchDiary
         menu.run()
     default:
-        print(input)
+        options.clearScreen()
+        options.handler(input)
+        print("?")
     }
     menu.show()
 }
-
-
-
 

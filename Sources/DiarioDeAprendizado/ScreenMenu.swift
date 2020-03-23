@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum MenuOptionsEnum {
     case showGrades
     case showUserInformation
@@ -42,7 +41,7 @@ public class ScreenMenu {
         1 - mostrar disciplina
         2 - mostrar informacoes de usuario
         3 - criar nova disciplina
-        4 - criar novo diario
+        4 - adicionar anotacao no diario de aprendizagem
         5 - pesquisar anotacoes(data, nome, disciplina)
         """)
     }
