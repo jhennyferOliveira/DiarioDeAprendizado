@@ -56,6 +56,10 @@ public class MenuOptions: MenuOptionsDelegate {
     
     func searchDiary() {
         let searchScreen = ScreenSearchDiary()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        let myStringDate = formatter.string(from: Date())
+//        print("\u{001B}[2J") // clear terminal standalone
         let options = DiaryOptions()
         searchScreen.delegate = options
         clearScreen()
@@ -81,8 +85,7 @@ public class MenuOptions: MenuOptionsDelegate {
         searchScreen.show()
         }
     }
-    
-    
+
     func showDiaries() {
         let service = Service<Diario>()
         let diarios = service.read(filePath: completePathDisciplinas)
@@ -102,13 +105,56 @@ public class MenuOptions: MenuOptionsDelegate {
         let service = Service<Diario>()
         var diario = Diario()
         var disciplina = Disciplina()
-        disciplina.nome = "matematica"
-        diario.titulo = "Programação Orientada a Objetos"
-        diario.anotacao = "hoje aprendi bla bla bla"
-        diario.data = "22/03/2020"
-        diario.disciplina = disciplina
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        let stringData = formatter.string(from: Date())
+      
+        print("Digite o nome da disciplina: ")
+        guard let nomeDisciplina = readLine() else {
+            return
+        }
+
+        print("Digite o título da Anotação: ")
+        guard let tituloAnotacao = readLine() else {
+            return
+        }
+
+        print("Digite a anotação: ")
+        guard let anotacao = readLine() else {
+            return
+        }
+
+        print("Digite a categoria(Faculdade, Trabalho): ")
+        guard let categoria = readLine() else {
+            return
+        }
+
+        diario.data = stringData
+        diario.titulo = tituloAnotacao
+        diario.categoria = categoria
+        diario.anotacao = anotacao
+
+        if let disciplinaProcurada = searchGradeByName(nome: nomeDisciplina){
+            diario.disciplina = disciplinaProcurada
+        } else {
+            let serviceDisciplina = Service<Disciplina>()
+            disciplina.nome = nomeDisciplina
+            serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+            diario.disciplina = disciplina
+        }
         service.override(object: diario, folderPath: folderPath, fileName: "diario.txt")
         print("Diario foi criado")
+    }
+
+    func searchGradeByName(nome : String) -> Disciplina?{
+        let service = Service<Disciplina>()
+        let arrayDisciplinas : [Disciplina] = service.read(filePath: completePathDisciplinas)
+        for disciplina in arrayDisciplinas{
+            if(disciplina.nome == nome){
+                return disciplina
+            }
+        }
+        return nil
     }
     
     
