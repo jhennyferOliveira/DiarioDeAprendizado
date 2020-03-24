@@ -9,60 +9,72 @@
 import Foundation
 
 enum MenuOptionsEnum {
-    case telaMeuDiario
-    case telaDisciplina
-    case telaPerfil
+    case screenMyDiary
+    case screenGrade
+    case screenPerfil
 }
 
 public class ScreenMenu {
     
     weak var delegate: MenuOptionsDelegate?
-    var options = MenuOptionsEnum.telaMeuDiario
+    var options = MenuOptionsEnum.screenMyDiary
     
     func run() {
         switch options {
-        case .telaMeuDiario:
-            delegate?.showGrades()
-        case .telaDisciplina:
-            delegate?.showUserInformation()
-        case .telaPerfil:
-            delegate?.showGrades()
+        case .screenMyDiary:
+            delegate?.startScreenDiary()
+        case .screenGrade:
+            delegate?.startScreenGrade()
+        case .screenPerfil:
+            delegate?.startScreenUser()
         }
     }
     
     func show() {
         print("""
+        
+        MENU PRINCIPAL:
+
         1 - meu diario
         2 - disciplinas
         3 - perfil
+
+        0 - fechar
+
         """)
     }
     
     func main() {
+        clearScreen()
+        show()
         while let input = readLine() {
 
-            guard input != "quit" else {
+            guard input != "0" else {
                 break
             }
 
             switch input {
             case "1":
-                options = .telaMeuDiario
-            case "2":
-                options = .telaDisciplina
+                options = .screenMyDiary
+                clearScreen()
+                run()
+            case "2":   
+                options = .screenGrade
+                clearScreen()
+                run()
             case "3":
-                options = .telaPerfil
+                options = .screenPerfil
+                clearScreen()
+                run()
             default:
-                limparTela()
                 print("?")
             }
-            limparTela()
-            run()
+            clearScreen()
             show()
         }
     }
     
-    private func limparTela() {
+    private func clearScreen() {
         let clear = Process()
         clear.launchPath = "/usr/bin/clear"
         clear.arguments = []
