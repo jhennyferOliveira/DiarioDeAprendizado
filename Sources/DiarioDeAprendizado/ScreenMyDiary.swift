@@ -32,7 +32,7 @@ public class ScreenMyDiary {
             delegate?.editAnotation()
         case .deleteAnotation:
             delegate?.deleteAnotation()
-        case .showAnotations
+        case .showAnotations:
             delegate?.showAnotations()
         }
     }

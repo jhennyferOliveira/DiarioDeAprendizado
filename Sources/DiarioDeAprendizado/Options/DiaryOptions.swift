@@ -14,7 +14,7 @@ protocol DiaryOptionsDelegate: class {
     func addAnotation()
     func deleteAnotation()
     func editAnotation()
-    func showAnotatitons()
+    func showAnotations()
 }
 
 public class DiaryOptions: DiaryOptionsDelegate {
