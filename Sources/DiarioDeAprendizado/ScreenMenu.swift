@@ -9,41 +9,65 @@
 import Foundation
 
 enum MenuOptionsEnum {
-    case showGrades
-    case showUserInformation
-    case createNewGrade
-    case createNewDiaryAnotation
-    case searchDiary
+    case telaMeuDiario
+    case telaDisciplina
+    case telaPerfil
 }
 
 public class ScreenMenu {
     
     weak var delegate: MenuOptionsDelegate?
-    var options = MenuOptionsEnum.showGrades
+    var options = MenuOptionsEnum.telaMeuDiario
     
     func run() {
         switch options {
-        case .showGrades:
+        case .telaMeuDiario:
             delegate?.showGrades()
-        case .showUserInformation:
+        case .telaDisciplina:
             delegate?.showUserInformation()
-        case .createNewGrade:
-            delegate?.createNewGrade()
-        case .createNewDiaryAnotation:
-            delegate?.createNewDiary()
-        case .searchDiary:
-            delegate?.searchDiary()
+        case .telaPerfil:
+            delegate?.showGrades()
         }
     }
     
     func show() {
         print("""
-        1 - mostrar disciplina
-        2 - mostrar informacoes de usuario
-        3 - criar nova disciplina
-        4 - adicionar anotacao no diario de aprendizagem
-        5 - pesquisar anotacoes(data, nome, disciplina)
+        1 - meu diario
+        2 - disciplinas
+        3 - perfil
         """)
+    }
+    
+    func main() {
+        while let input = readLine() {
+
+            guard input != "quit" else {
+                break
+            }
+
+            switch input {
+            case "1":
+                options = .telaMeuDiario
+            case "2":
+                options = .telaDisciplina
+            case "3":
+                options = .telaPerfil
+            default:
+                limparTela()
+                print("?")
+            }
+            limparTela()
+            run()
+            show()
+        }
+    }
+    
+    private func limparTela() {
+        let clear = Process()
+        clear.launchPath = "/usr/bin/clear"
+        clear.arguments = []
+        clear.launch()
+        clear.waitUntilExit()
     }
     
 }

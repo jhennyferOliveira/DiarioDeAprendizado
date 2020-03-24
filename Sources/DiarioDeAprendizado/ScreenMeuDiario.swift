@@ -14,7 +14,7 @@ enum SearchDiaryOptions {
     case disciplina
 }
 
-public class ScreenSearchDiary {
+public class ScreenMeuDiario {
     
      weak var delegate: DiaryOptionsDelegate?
     var options = SearchDiaryOptions.nome
