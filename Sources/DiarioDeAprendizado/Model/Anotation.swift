@@ -13,5 +13,5 @@ public struct Anotation: Codable {
     var texto: String = ""
     var data: String? = ""
     var categoria: String? = ""
-    var disciplina: Grade = Grade()
+    var disciplina: Subject = Subject()
 }

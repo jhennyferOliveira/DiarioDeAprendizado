@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 protocol MenuOptionsDelegate: class {
     func startScreenDiary()
     func startScreenGrade()
@@ -18,54 +16,27 @@ protocol MenuOptionsDelegate: class {
 
 public class MenuOptions: MenuOptionsDelegate {
     
-    let folderPath = FileManager.default.currentDirectoryPath + "/json"
-    let completePathDisciplinas = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
-    let completePathAluno = FileManager.default.currentDirectoryPath + "/json/aluno.txt"
-    
     func startScreenGrade() {
+        let screen = ScreenGrades()
+        let options = GradeOptions()
         
+        screen.delegate = options
+        screen.main()
     }
     
     func startScreenUser() {
-        
+        let screen = ScreenUser()
+        let options = UserOptions()
+       
+        screen.delegate = options
+        screen.main()
     }
-    
     
     func startScreenDiary() {
-        let telaDiario = ScreenMyDiary()
+        let screen = ScreenMyDiary()
         let options = DiaryOptions()
         
-        telaDiario.delegate = options
-        telaDiario.main()
-    }
-    
-    
-    func createNewDiary() {
-    
-    }
-
-    func searchGradeByName(nome : String) -> Grade?{
-        let service = Service<Grade>()
-        let arrayDisciplinas : [Grade] = service.read(filePath: completePathDisciplinas)
-        for disciplina in arrayDisciplinas{
-            if(disciplina.nome == nome){
-                return disciplina
-            }
-        }
-        return nil
-    }
-    
-    
-    func showGrades() {
-        let service = Service<Grade>()
-        let disciplinas = service.read(filePath: completePathDisciplinas)
-        print("--------------------------------------")
-        print("estas sao as disciplinas cadastradas: \n")
-        disciplinas.enumerated().forEach { (index, disciplina) in
-            print("\(index) - \(disciplina.nome)")
-           
-        }
-        print("--------------------------------------\n\n")
-        
+        screen.delegate = options
+        screen.main()
     }
 }

@@ -24,44 +24,50 @@ public class ScreenMenu {
         case .screenMyDiary:
             delegate?.startScreenDiary()
         case .screenGrade:
-            print("")
-            // delegate?.showUserInformation()
+            delegate?.startScreenGrade()
         case .screenPerfil:
-            print("")
-            // delegate?.showGrades()
+            delegate?.startScreenUser()
         }
     }
     
     func show() {
         print("""
+        
+        MENU PRINCIPAL:
+
         1 - meu diario
         2 - disciplinas
         3 - perfil
+
+        0 - fechar
+
         """)
     }
     
     func main() {
+        clearScreen()
         show()
         while let input = readLine() {
 
-            guard input != "quit" else {
+            guard input != "0" else {
                 break
             }
 
             switch input {
             case "1":
                 options = .screenMyDiary
+                clearScreen()
                 run()
-            case "2":
+            case "2":   
                 options = .screenGrade
+                clearScreen()
                 run()
             case "3":
                 options = .screenPerfil
+                clearScreen()
                 run()
             default:
-                clearScreen()
                 print("?")
-                break
             }
             clearScreen()
             show()

@@ -39,12 +39,16 @@ public class ScreenMyDiary {
     
     func show() {
         print("""
-        0 - voltar
+
+        MENU DIARIO:
+
         1 - mostrar todas as anotações
         2 - pesquisar por (nome, data, categoria)
         3 - adicionar anotação
         4 - editar anotação
         5 - apagar anotação
+
+        0 - voltar
         """)
     }
     
@@ -72,7 +76,7 @@ public class ScreenMyDiary {
                 options = .deleteAnotation
                 run()
             default:
-             print(input)
+                print("?")
         }
         clearScreen()
         show()
@@ -86,7 +90,7 @@ public class ScreenMyDiary {
         clear.launch()
         clear.waitUntilExit()
     }
-    
+    // function to call submenu search diary
     private func startSearchScreenDiary() {
         let screen = SearchScreenDiary()
         let options = DiaryOptions()

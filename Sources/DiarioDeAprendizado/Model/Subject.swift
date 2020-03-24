@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Grade: Codable {
+public struct Subject: Codable {
     var nome: String = ""
     var nota1: String? = "-"
     var nota2: String? = "-"

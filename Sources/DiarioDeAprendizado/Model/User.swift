@@ -12,5 +12,5 @@ public struct User: Codable {
     var nome: String
     var matricula: String
     var senha: String
-    var disciplinas: [Grade]
+    var disciplinas: [Subject]
 }

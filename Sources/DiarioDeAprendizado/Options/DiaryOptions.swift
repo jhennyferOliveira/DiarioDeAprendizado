@@ -20,8 +20,8 @@ protocol DiaryOptionsDelegate: class {
 public class DiaryOptions: DiaryOptionsDelegate {
   
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
-    let completePathDisciplinas = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
-    let completePathAluno = FileManager.default.currentDirectoryPath + "/json/aluno.txt"
+    let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
+    // let completePathAluno = FileManager.default.currentDirectoryPath + "/json/aluno.txt"
     
     let service = Service<Anotation>()
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
@@ -59,7 +59,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
     func addAnotation() {
         let service = Service<Anotation>()
         var diario = Anotation()
-        var disciplina = Grade()
+        var disciplina = Subject()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
         let stringData = formatter.string(from: Date())
@@ -92,7 +92,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         if let disciplinaProcurada = searchGradeByName(nome: nomeDisciplina) {
          diario.disciplina = disciplinaProcurada
         } else {
-         let serviceDisciplina = Service<Grade>()
+         let serviceDisciplina = Service<Subject>()
          disciplina.nome = nomeDisciplina
          serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
          diario.disciplina = disciplina
@@ -111,15 +111,15 @@ public class DiaryOptions: DiaryOptionsDelegate {
     
     func showAnotations() {
         let service = Service<Anotation>()
-        let diarios = service.read(filePath: completePathDisciplinas)
+        let diarios = service.read(filePath: completePathSubject)
         diarios.enumerated().forEach { (index, diario) in
             print("\(index) \(diario.titulo)")
         }
     }
     
-    func searchGradeByName(nome : String) -> Grade?{
-          let service = Service<Grade>()
-          let arrayDisciplinas : [Grade] = service.read(filePath: completePathDisciplinas)
+    func searchGradeByName(nome : String) -> Subject?{
+          let service = Service<Subject>()
+          let arrayDisciplinas : [Subject] = service.read(filePath: completePathSubject)
           for disciplina in arrayDisciplinas{
               if(disciplina.nome == nome){
                   return disciplina
