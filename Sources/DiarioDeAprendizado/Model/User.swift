@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Aluno: Codable {
+public struct User: Codable {
     var nome: String
     var matricula: String
     var senha: String
-    var disciplinas: [Disciplina]
+    var disciplinas: [Grade]
 }

@@ -8,10 +8,10 @@
 
 import Foundation
 
-public struct Diario: Codable {
+public struct Anotation: Codable {
     var titulo: String = ""
-    var anotacao: String = ""
+    var texto: String = ""
     var data: String? = ""
     var categoria: String? = ""
-    var disciplina: Disciplina = Disciplina()
+    var disciplina: Grade = Grade()
 }

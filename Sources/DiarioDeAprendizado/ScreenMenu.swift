@@ -9,24 +9,26 @@
 import Foundation
 
 enum MenuOptionsEnum {
-    case telaMeuDiario
-    case telaDisciplina
-    case telaPerfil
+    case screenMyDiary
+    case screenGrade
+    case screenPerfil
 }
 
 public class ScreenMenu {
     
     weak var delegate: MenuOptionsDelegate?
-    var options = MenuOptionsEnum.telaMeuDiario
+    var options = MenuOptionsEnum.screenMyDiary
     
     func run() {
         switch options {
-        case .telaMeuDiario:
-            delegate?.showGrades()
-        case .telaDisciplina:
-            delegate?.showUserInformation()
-        case .telaPerfil:
-            delegate?.showGrades()
+        case .screenMyDiary:
+            delegate?.startScreenDiary()
+        case .screenGrade:
+            print("")
+            // delegate?.showUserInformation()
+        case .screenPerfil:
+            print("")
+            // delegate?.showGrades()
         }
     }
     
@@ -39,6 +41,7 @@ public class ScreenMenu {
     }
     
     func main() {
+        show()
         while let input = readLine() {
 
             guard input != "quit" else {
@@ -47,22 +50,25 @@ public class ScreenMenu {
 
             switch input {
             case "1":
-                options = .telaMeuDiario
+                options = .screenMyDiary
+                run()
             case "2":
-                options = .telaDisciplina
+                options = .screenGrade
+                run()
             case "3":
-                options = .telaPerfil
+                options = .screenPerfil
+                run()
             default:
-                limparTela()
+                clearScreen()
                 print("?")
+                break
             }
-            limparTela()
-            run()
+            clearScreen()
             show()
         }
     }
     
-    private func limparTela() {
+    private func clearScreen() {
         let clear = Process()
         clear.launchPath = "/usr/bin/clear"
         clear.arguments = []
