@@ -55,7 +55,7 @@ public class MenuOptions: MenuOptionsDelegate {
     
     
     func searchDiary() {
-        let searchScreen = ScreenSearchDiary()
+        let searchScreen = ScreenMeuDiario()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
         let myStringDate = formatter.string(from: Date())
