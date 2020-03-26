@@ -12,19 +12,17 @@ protocol DiaryOptionsDelegate: class {
     func searchByTitle()
     func searchByCategory()
     func addAnotation()
-    func deleteAnotation()
+    func deleteAnotation(title: String?, index: Int?)
     func editAnotation()
     func showAnotations()
 }
 
 public class DiaryOptions: DiaryOptionsDelegate {
-  
+    
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
-    // let completePathAluno = FileManager.default.currentDirectoryPath + "/json/aluno.txt"
-    
-    let service = Service<Anotation>()
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+    let service = Service<Anotation>()
     
     func searchByDate() {
         let diarios = service.read(filePath: completePathDiary)
@@ -57,7 +55,6 @@ public class DiaryOptions: DiaryOptionsDelegate {
     }
     
     func addAnotation() {
-        let service = Service<Anotation>()
         var diario = Anotation()
         var disciplina = Subject()
         let formatter = DateFormatter()
@@ -101,7 +98,28 @@ public class DiaryOptions: DiaryOptionsDelegate {
         print("Diario foi criado")
     }
     
-    func deleteAnotation() {
+    func deleteAnotation(title: String? = nil, index: Int? = nil) {
+        var diary = service.read(filePath: completePathDiary)
+    
+        // caso o usuario digite um titulo
+        if let _ = title {
+            let newDiary = diary.filter { anotation -> Bool in
+                if anotation.titulo == title {
+                    return false
+                }
+                return true
+            }
+            service.write(array: newDiary, filePath: completePathDiary)
+        }
+        
+        // caso o usuario digite um indice
+        if let index = index {
+            if diary.indices.contains(index) { // if is on range
+                diary.remove(at: index)
+                service.write(array: diary, filePath: completePathDiary)
+            }
+            print("não existe nada dentro desse range")
+        }
         
     }
     
@@ -110,10 +128,9 @@ public class DiaryOptions: DiaryOptionsDelegate {
     }
     
     func showAnotations() {
-        let service = Service<Anotation>()
         let diary = service.read(filePath: completePathDiary)
         
-        let anotations = diario.enumerated().map { (index, anotation) in
+        let anotations = diary.enumerated().map { (index, anotation) in
             return "\(index) - \(anotation.titulo)" // array: String = ["0 - teste". "1 - teste" ," 2 - teste"]
         }.reduce(""){ $0 + "\n" + $1 } // junta elementos do array -> 0 - teste \n 1 - teste
         
@@ -121,7 +138,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             Anotações:
             \(anotations)
             
-            Obs: para visualizar a anotação, basta escrever o indice ou nome da anotação.
+            Obs: para visualizar a anotação, basta escrever o indice ou titulo da anotação.
             """)
         /* not implemented yet [submenu select anotation]
          
@@ -130,11 +147,12 @@ public class DiaryOptions: DiaryOptionsDelegate {
         */
     }
     
+    // essa função deveria estar no grade function mas ela é necessaria aqui então não sei :œ
     func searchGradeByName(nome : String) -> Subject? {
-          let service = Service<Subject>()
-          let arrayDisciplinas : [Subject] = service.read(filePath: completePathSubject)
-          for disciplina in arrayDisciplinas{
-              if(disciplina.nome == nome){
+          let service_subject = Service<Subject>()
+          let arrayDisciplinas : [Subject] = service_subject.read(filePath: completePathSubject)
+          for disciplina in arrayDisciplinas {
+              if(disciplina.nome == nome) {
                   return disciplina
               }
           }

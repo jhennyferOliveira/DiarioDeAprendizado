@@ -32,7 +32,10 @@ public final class Service<Type: Codable> {
         return arrayType
     }
     
-    func write(filePath: String) {
+    func write(array: [Type]? = nil, filePath: String) {
+        if let arrayType = array {
+            arrayObject = arrayType
+        }
         do { // write
             let jsonData = try encoder.encode(arrayObject)
             if let jsonString = String(data: jsonData, encoding: .utf8) {
@@ -43,10 +46,13 @@ public final class Service<Type: Codable> {
         }
     }
 
-    func override(object: Type, folderPath: String, fileName: String) {
+    func override(object: Type, folderPath: String, fileName: String? = nil) {
         
         encoder.outputFormatting = .prettyPrinted
-        let filePath = folderPath + "/\(fileName)"
+        var filePath = folderPath
+        if let filename = fileName {
+            filePath = folderPath + "/\(filename)"
+        }
         
         if fileManager.fileExists(atPath: filePath) {
             do { // read & append
@@ -55,7 +61,7 @@ public final class Service<Type: Codable> {
                 write(filePath: filePath)
             }
         } else { // if dont exist will create a new directory
-            createDirectory(folderPath: folderPath, fileName: fileName)
+            createDirectory(folderPath: folderPath, filePath: filePath)
             arrayObject.append(object)
             write(filePath: filePath)
         }
@@ -73,12 +79,12 @@ public final class Service<Type: Codable> {
         }
     }
     
-    private func createDirectory(folderPath: String, fileName: String) {
+    private func createDirectory(folderPath: String, filePath: String) {
         do {
             try fileManager.createDirectory(atPath: folderPath, withIntermediateDirectories: true, attributes: nil)
             let jsonData = try encoder.encode(arrayObject)
             if let jsonString = String(data: jsonData, encoding: .utf8) {
-                let url = URL(fileURLWithPath: folderPath + "/\(fileName)")
+                let url = URL(fileURLWithPath: filePath)
                 try jsonString.write(to: url, atomically: true, encoding: .utf8)
             }
         }

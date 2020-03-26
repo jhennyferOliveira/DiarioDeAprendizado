@@ -31,7 +31,7 @@ public class ScreenMyDiary {
         case .editAnotation:
             delegate?.editAnotation()
         case .deleteAnotation:
-            delegate?.deleteAnotation()
+            deleteAnotation()
         case .showAnotations:
             delegate?.showAnotations()
         }
@@ -100,5 +100,21 @@ public class ScreenMyDiary {
         let options = DiaryOptions()
         screen.delegate = options
         screen.main()
+    }
+    
+    private func deleteAnotation() {
+        
+        print("digite um indice ou nome para deletar")
+        guard let input = readLine() else {
+            return
+        }
+        // if its number
+        if let index = Int(input) {
+            delegate?.deleteAnotation(title: nil, index: index)
+        }
+        delegate?.deleteAnotation(title: input, index: nil)
+        
+        
+        
     }
 }

@@ -1,0 +1,17 @@
+[
+  {
+    "nota1" : "-",
+    "nome" : "sadsa",
+    "nota2" : "-"
+  },
+  {
+    "nota1" : "-",
+    "nome" : "Matematica Discreta",
+    "nota2" : "-"
+  },
+  {
+    "nota1" : "-",
+    "nome" : "Teste",
+    "nota2" : "-"
+  }
+]
