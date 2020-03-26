@@ -62,23 +62,27 @@ public class ScreenMyDiary {
         switch input {
             case "1":
                 options = .showAnotations
+                clearScreen()
                 run()
             case "2":
                 options = .searchScreenDiary
+                clearScreen()
                 run()
             case "3":
                 options = .addAnotation
+                clearScreen()
                 run()
             case "4":
                 options = .editAnotation
+                clearScreen()
                 run()
             case "5":
                 options = .deleteAnotation
+                clearScreen()
                 run()
             default:
                 print("?")
         }
-        clearScreen()
         show()
         }
     }

@@ -111,13 +111,26 @@ public class DiaryOptions: DiaryOptionsDelegate {
     
     func showAnotations() {
         let service = Service<Anotation>()
-        let diarios = service.read(filePath: completePathSubject)
-        diarios.enumerated().forEach { (index, diario) in
-            print("\(index) \(diario.titulo)")
-        }
+        let diary = service.read(filePath: completePathDiary)
+        
+        let anotations = diario.enumerated().map { (index, anotation) in
+            return "\(index) - \(anotation.titulo)" // array: String = ["0 - teste". "1 - teste" ," 2 - teste"]
+        }.reduce(""){ $0 + "\n" + $1 } // junta elementos do array -> 0 - teste \n 1 - teste
+        
+        print("""
+            Anotações:
+            \(anotations)
+            
+            Obs: para visualizar a anotação, basta escrever o indice ou nome da anotação.
+            """)
+        /* not implemented yet [submenu select anotation]
+         
+         let screen_select_anotation = ScreenSelectAnotation()
+         screen_select_anotation.main()
+        */
     }
     
-    func searchGradeByName(nome : String) -> Subject?{
+    func searchGradeByName(nome : String) -> Subject? {
           let service = Service<Subject>()
           let arrayDisciplinas : [Subject] = service.read(filePath: completePathSubject)
           for disciplina in arrayDisciplinas{
