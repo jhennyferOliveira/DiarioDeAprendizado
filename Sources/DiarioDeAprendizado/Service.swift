@@ -33,6 +33,7 @@ public final class Service<Type: Codable> {
     }
     
     func write(array: [Type]? = nil, filePath: String) {
+        encoder.outputFormatting = .prettyPrinted
         if let arrayType = array {
             arrayObject = arrayType
         }
@@ -47,7 +48,6 @@ public final class Service<Type: Codable> {
     }
 
     func override(object: Type, folderPath: String, fileName: String? = nil) {
-        
         encoder.outputFormatting = .prettyPrinted
         var filePath = folderPath
         if let filename = fileName {

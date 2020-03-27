@@ -19,13 +19,17 @@ public class SearchScreenDiary {
     var options = SearchDiaryOptions.title
     
     func run() {
+        print("digite o parametro de busca: ")
+        guard let input = readLine() else  {
+            return
+        }
         switch options {
         case .title:
-            delegate?.searchByTitle()
+            delegate?.searchByTitle(title: input)
         case .date:
-            delegate?.searchByDate()
+            delegate?.searchByDate(date: input)
         case .category:
-            delegate?.searchByCategory()
+            delegate?.searchByCategory(category: input)
         }
     }
     
