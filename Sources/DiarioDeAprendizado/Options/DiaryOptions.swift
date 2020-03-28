@@ -119,7 +119,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         guard let categoria = readLine() else {
             return
         }
-        
+        diario.id = autoIncrementNoteId()
         diario.data = stringData
         diario.titulo = tituloAnotacao
         diario.categoria = categoria
@@ -130,6 +130,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         } else {
             let serviceDisciplina = Service<Subject>()
             disciplina.nome = nomeDisciplina
+            disciplina.id = autoIncrementSubjectId()
             serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
@@ -245,6 +246,33 @@ public class DiaryOptions: DiaryOptionsDelegate {
             }
         }
         return nil
+    }
+    
+    func autoIncrementNoteId() -> Int{
+        let service = Service<Anotation>()
+        let arrayNotes : [Anotation] = service.read(filePath: completePathDiary)
+        let lengthArrayNotes = arrayNotes.count
+        var id = 0
+        if(lengthArrayNotes == 0){
+            id = 1
+            return id
+        } else {
+            id = arrayNotes[lengthArrayNotes-1].id + 1
+            return id
+        }
+    }
+    func autoIncrementSubjectId() -> Int{
+        let service = Service<Subject>()
+        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
+        let lengthArraySubject = arraySubject.count
+        var id = 0
+        if(lengthArraySubject == 0){
+            id = 1
+            return id
+        } else {
+            id = arraySubject[lengthArraySubject-1].id + 1
+            return id
+        }
     }
     
 }

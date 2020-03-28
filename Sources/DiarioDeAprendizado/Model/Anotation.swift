@@ -9,6 +9,7 @@
 import Foundation
 
 public struct Anotation: Codable {
+    var id : Int = 0
     var titulo: String = ""
     var texto: String = ""
     var data: String? = ""
