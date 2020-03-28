@@ -26,7 +26,7 @@ public final class Service<Type: Codable> {
                 arrayType = try decoder.decode([Type].self, from: jsonData)
                 return arrayType
             } catch {
-                print(error.localizedDescription)
+                print(error.localizedDescription) // tem que ajeitar isso depois porque ta aparecendo pro user
             }
         }
         return arrayType

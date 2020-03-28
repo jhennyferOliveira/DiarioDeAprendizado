@@ -44,6 +44,7 @@ public class GradeOptions: GradeOptionsDelegate {
             disciplina.nota2 = n2
         }
         disciplina.nome = nome
+        disciplina.id = autoIncrementSubjectId()
         print(completePathSubject)
         service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         // limparTela()
@@ -63,6 +64,19 @@ public class GradeOptions: GradeOptionsDelegate {
 
         """)
         
+    }
+    func autoIncrementSubjectId() -> Int{
+        let service = Service<Subject>()
+        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
+        let lengthArraySubject = arraySubject.count
+        var id = 0
+        if(lengthArraySubject == 0){
+            id = 1
+            return id
+        } else {
+            id = arraySubject[lengthArraySubject-1].id + 1
+            return id
+        }
     }
     
 }

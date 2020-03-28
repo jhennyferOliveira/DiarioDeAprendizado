@@ -34,13 +34,13 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
         let filterNotes = anotations.map { (note) in
-            return note.titulo
+            return "\(note.id) - \(note.titulo)"
         }.reduce("") { $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
             print("""
                 RESULTADO DA PESQUISA:
-                \(filterNotes)
+                \(filterNotes)\n
                 """)
         } else {
             print("não foi registrado nenhuma anotacão na data: \(date)")
@@ -80,7 +80,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
         let filterNotes = anotations.map { (note) in
-            return note.titulo
+            return "\(note.id) - \(note.titulo)"
         }.reduce("") { $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
@@ -119,7 +119,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         guard let categoria = readLine() else {
             return
         }
-        
+        diario.id = autoIncrementNoteId()
         diario.data = stringData
         diario.titulo = tituloAnotacao
         diario.categoria = categoria
@@ -130,6 +130,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         } else {
             let serviceDisciplina = Service<Subject>()
             disciplina.nome = nomeDisciplina
+            disciplina.id = autoIncrementSubjectId()
             serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
@@ -214,22 +215,22 @@ public class DiaryOptions: DiaryOptionsDelegate {
     func showAnotations() {
         let diary = service.read(filePath: completePathDiary)
         
-        let anotations = diary.enumerated().map { (index, anotation) in
-            return "\(index) - \(anotation.titulo)" // array: String = ["0 - teste". "1 - teste" ," 2 - teste"]
-        }.reduce(""){ $0 + "\n" + $1 } // junta elementos do array -> 0 - teste \n 1 - teste
+        let anotations = diary.map { (anotation) in
+            return "\(anotation.id) - \(anotation.titulo)"
+        }.reduce(""){ $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
             print("""
                 Anotações:
                 \(anotations)
-                
+
                 """)
         } else {
             print("você não tem nenhuma anotação, crie uma agora!")
         }
-        
+
         /* not implemented yet [submenu select anotation]
-         
+
          let screen_select_anotation = ScreenSelectAnotation()
          screen_select_anotation.main()
          */
@@ -246,5 +247,33 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         return nil
     }
+    
+    func autoIncrementNoteId() -> Int{
+        let service = Service<Anotation>()
+        let arrayNotes : [Anotation] = service.read(filePath: completePathDiary)
+        let lengthArrayNotes = arrayNotes.count
+        var id = 0
+        if(lengthArrayNotes == 0){
+            id = 1
+            return id
+        } else {
+            id = arrayNotes[lengthArrayNotes-1].id + 1
+            return id
+        }
+    }
+    func autoIncrementSubjectId() -> Int{
+        let service = Service<Subject>()
+        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
+        let lengthArraySubject = arraySubject.count
+        var id = 0
+        if(lengthArraySubject == 0){
+            id = 1
+            return id
+        } else {
+            id = arraySubject[lengthArraySubject-1].id + 1
+            return id
+        }
+    }
+
     
 }

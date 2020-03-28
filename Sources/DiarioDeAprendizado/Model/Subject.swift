@@ -9,6 +9,7 @@
 import Foundation
 
 public struct Subject: Codable {
+    var id : Int = 0
     var nome: String = ""
     var nota1: String? = "-"
     var nota2: String? = "-"
