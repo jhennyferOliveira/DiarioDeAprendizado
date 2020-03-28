@@ -34,13 +34,13 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
         let filterNotes = anotations.map { (note) in
-            return note.titulo
+            return "\(note.id) - \(note.titulo)"
         }.reduce("") { $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
             print("""
                 RESULTADO DA PESQUISA:
-                \(filterNotes)
+                \(filterNotes)\n
                 """)
         } else {
             print("não foi registrado nenhuma anotacão na data: \(date)")
@@ -80,7 +80,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
         let filterNotes = anotations.map { (note) in
-            return note.titulo
+            return "\(note.id) - \(note.titulo)"
         }.reduce("") { $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
@@ -215,22 +215,22 @@ public class DiaryOptions: DiaryOptionsDelegate {
     func showAnotations() {
         let diary = service.read(filePath: completePathDiary)
         
-        let anotations = diary.enumerated().map { (index, anotation) in
-            return "\(index) - \(anotation.titulo)" // array: String = ["0 - teste". "1 - teste" ," 2 - teste"]
-        }.reduce(""){ $0 + "\n" + $1 } // junta elementos do array -> 0 - teste \n 1 - teste
+        let anotations = diary.map { (anotation) in
+            return "\(anotation.id) - \(anotation.titulo)"
+        }.reduce(""){ $0 + "\n" + $1 }
         
         if !anotations.isEmpty {
             print("""
                 Anotações:
                 \(anotations)
-                
+
                 """)
         } else {
             print("você não tem nenhuma anotação, crie uma agora!")
         }
-        
+
         /* not implemented yet [submenu select anotation]
-         
+
          let screen_select_anotation = ScreenSelectAnotation()
          screen_select_anotation.main()
          */
@@ -274,5 +274,6 @@ public class DiaryOptions: DiaryOptionsDelegate {
             return id
         }
     }
+
     
 }

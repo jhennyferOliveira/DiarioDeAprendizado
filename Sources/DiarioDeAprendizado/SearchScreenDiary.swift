@@ -18,8 +18,8 @@ public class SearchScreenDiary {
     weak var delegate: DiaryOptionsDelegate?
     var options = SearchDiaryOptions.title
     
-    func run() {
-        print("digite o parametro de busca: ")
+    func run(chosenOption : String) {
+        print("Digite \(chosenOption): ")
         guard let input = readLine() else  {
             return
         }
@@ -28,8 +28,10 @@ public class SearchScreenDiary {
             delegate?.searchByTitle(title: input)
         case .date:
             delegate?.searchByDate(date: input)
+            selectAnotationById()
         case .category:
             delegate?.searchByCategory(category: input)
+            selectAnotationById()
         }
     }
     
@@ -46,6 +48,38 @@ public class SearchScreenDiary {
         """)
     }
     
+    func showFormattedAnotation(anotation : Anotation) {
+        
+        print("""
+            
+            TÍTULO: \(anotation.titulo)
+            DATA: \(anotation.data!)
+            DISCIPLINA: \(anotation.disciplina.nome)
+            
+            ANOTAÇÃO: \(anotation.texto)
+            
+            """)
+    }
+    
+    
+    
+    func selectAnotationById(){
+        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+        let service = Service<Anotation>()
+        let anotations : [Anotation] = service.read(filePath: completePathDiary)
+        if(!anotations.isEmpty){
+            print("Digite o id da anotação para visualizá-la: ")
+            guard let input = readLine() else  {
+                return
+            }
+            for anotation in anotations{
+                if (String(anotation.id) == input){
+                    showFormattedAnotation(anotation: anotation)
+                }
+            }
+        }
+    }
+    
     func main() {
         show()
         while let input = readLine() {
@@ -56,25 +90,25 @@ public class SearchScreenDiary {
             switch input {
             case "1":
                 options = .title
-                run()
+                run(chosenOption: "o título")
             case "2":
                 options = .date
-                run()
+                run(chosenOption: "a data(formato: dd-MM-YYYY)")
             case "3":
                 options = .category
-                run()
+                run(chosenOption: "a categoria")
             default:
                 print("?")
             }
-        show()
+            show()
         }
     }
     
     private func clearScreen() {
-         let clear = Process()
-         clear.launchPath = "/usr/bin/clear"
-         clear.arguments = []
-         clear.launch()
-         clear.waitUntilExit()
+        let clear = Process()
+        clear.launchPath = "/usr/bin/clear"
+        clear.arguments = []
+        clear.launch()
+        clear.waitUntilExit()
     }
 }
