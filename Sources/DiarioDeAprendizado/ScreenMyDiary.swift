@@ -29,9 +29,9 @@ public class ScreenMyDiary {
         case .addAnotation:
             delegate?.addAnotation()
         case .editAnotation:
-            delegate?.editAnotation()
+            editAnotation()
         case .deleteAnotation:
-            delegate?.deleteAnotation()
+            deleteAnotation()
         case .showAnotations:
             delegate?.showAnotations()
         }
@@ -62,23 +62,27 @@ public class ScreenMyDiary {
         switch input {
             case "1":
                 options = .showAnotations
+                clearScreen()
                 run()
             case "2":
                 options = .searchScreenDiary
+                clearScreen()
                 run()
             case "3":
                 options = .addAnotation
+                clearScreen()
                 run()
             case "4":
                 options = .editAnotation
+                clearScreen()
                 run()
             case "5":
                 options = .deleteAnotation
+                clearScreen()
                 run()
             default:
                 print("?")
         }
-        clearScreen()
         show()
         }
     }
@@ -96,5 +100,33 @@ public class ScreenMyDiary {
         let options = DiaryOptions()
         screen.delegate = options
         screen.main()
+    }
+    
+    private func deleteAnotation() {
+        delegate?.showAnotations()
+        print("digite um indice ou nome para deletar")
+        guard let input = readLine() else {
+            return
+        }
+        // if its number
+        if let index = Int(input) {
+            delegate?.deleteAnotation(title: nil, index: index)
+        } else {
+            delegate?.deleteAnotation(title: input, index: nil)
+        }
+    }
+    
+    private func editAnotation() {
+        delegate?.showAnotations()
+        print("digite um indice ou nome para alterar")
+        guard let input = readLine() else {
+            return
+        }
+
+        if let index = Int(input) {
+            delegate?.editAnotation(title: nil, index: index)
+        } else {
+            delegate?.editAnotation(title: input, index: nil)
+        }
     }
 }

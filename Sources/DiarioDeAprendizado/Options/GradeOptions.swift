@@ -52,14 +52,16 @@ public class GradeOptions: GradeOptionsDelegate {
     
     func showGrades() {
         let service = Service<Subject>()
-        let disciplinas = service.read(filePath: completePathSubject)
-        print("--------------------------------------")
-        print("estas sao as disciplinas cadastradas: \n")
-        disciplinas.enumerated().forEach { (index, disciplina) in
-            print("\(index) - \(disciplina.nome)")
-           
-        }
-        print("--------------------------------------\n\n")
+        let grades = service.read(filePath: completePathSubject)
+        let subjects = grades.enumerated().map { (index, subject) in
+            return "\(index) - \(subject.nome)"
+        }.reduce("") {$0 + "\n" + $1}
+        
+        print("""
+        Disciplinas Cadastradas:
+        \(subjects)
+
+        """)
         
     }
     
