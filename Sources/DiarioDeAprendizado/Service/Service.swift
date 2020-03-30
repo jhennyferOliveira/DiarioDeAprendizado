@@ -124,4 +124,12 @@ public final class Service<Type: Codable & Incrementable> {
             print(error.localizedDescription)
         }
     }
+    
+    func clearScreen() {
+        let clear = Process()
+        clear.launchPath = "/usr/bin/clear"
+        clear.arguments = []
+        clear.launch()
+        clear.waitUntilExit()
+    }
 }

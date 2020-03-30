@@ -8,7 +8,6 @@
 import Foundation
 
 public class ScreenSearchNote {
-    
     weak var delegate: DiaryOptionsDelegate?
     var options = searchBy.title
     
@@ -67,13 +66,5 @@ public class ScreenSearchNote {
             }
             show()
         }
-    }
-    
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
     }
 }

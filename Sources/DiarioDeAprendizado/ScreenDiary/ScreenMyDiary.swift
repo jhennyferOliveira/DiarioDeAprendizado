@@ -90,14 +90,6 @@ public class ScreenMyDiary {
             show()
         }
     }
-    
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
-    }
 
     private func startSearchScreenDiary() {
         let screen = ScreenSearchNote()
