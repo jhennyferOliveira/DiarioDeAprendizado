@@ -18,7 +18,7 @@ enum GradeOptionsEnum {
 public class ScreenGrades {
     
     weak var delegate: GradeOptionsDelegate?
-    var options = DiaryOptionsEnum.searchScreenDiary
+    var options = DiaryOptionsEnum.search
     
     func run() {
         
@@ -52,7 +52,7 @@ public class ScreenGrades {
                 options = .showAnotations
                 run()
             case "2":
-                options = .searchScreenDiary
+                options = .search
                 run()
             case "3":
                 options = .addAnotation

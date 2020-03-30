@@ -7,16 +7,10 @@
 
 import Foundation
 
-enum SearchDiaryOptions {
-    case title
-    case date
-    case category
-}
-
 public class SearchScreenDiary {
     
     weak var delegate: DiaryOptionsDelegate?
-    var options = SearchDiaryOptions.title
+    var options = searchBy.title
     
     func run(chosenOption : String) {
         print("Digite \(chosenOption): ")
@@ -25,13 +19,14 @@ public class SearchScreenDiary {
         }
         switch options {
         case .title:
-            delegate?.searchByTitle(title: input)
+            delegate?.search(parameter: input, search: .title)
+            delegate?.selectAnotationById()
         case .date:
-            delegate?.searchByDate(date: input)
-            selectAnotationById()
+            delegate?.search(parameter: input, search: .date)
+            delegate?.selectAnotationById()
         case .category:
-            delegate?.searchByCategory(category: input)
-            selectAnotationById()
+            delegate?.search(parameter: input, search: .category)
+            delegate?.selectAnotationById()
         }
     }
     
@@ -48,37 +43,18 @@ public class SearchScreenDiary {
         """)
     }
     
-    func showFormattedAnotation(anotation : Anotation) {
-        
-        print("""
-            
-            TÍTULO: \(anotation.titulo)
-            DATA: \(anotation.data!)
-            DISCIPLINA: \(anotation.disciplina.nome)
-            
-            ANOTAÇÃO: \(anotation.texto)
-            
-            """)
-    }
-    
-    
-    
-    func selectAnotationById(){
-        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
-        let service = Service<Anotation>()
-        let anotations : [Anotation] = service.read(filePath: completePathDiary)
-        if(!anotations.isEmpty){
-            print("Digite o id da anotação para visualizá-la: ")
-            guard let input = readLine() else  {
-                return
-            }
-            for anotation in anotations{
-                if (String(anotation.id) == input){
-                    showFormattedAnotation(anotation: anotation)
-                }
-            }
-        }
-    }
+//    func showFormattedAnotation(anotation : Anotation) {
+//        
+//        print("""
+//            
+//            TÍTULO: \(anotation.titulo)
+//            DATA: \(anotation.data)
+//            DISCIPLINA: \(anotation.disciplina.nome)
+//            
+//            ANOTAÇÃO: \(anotation.texto)
+//            
+//            """)
+//    }
     
     func main() {
         show()

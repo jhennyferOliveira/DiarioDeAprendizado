@@ -11,7 +11,7 @@ import Foundation
 
 enum DiaryOptionsEnum {
     case showAnotations
-    case searchScreenDiary
+    case search
     case addAnotation
     case editAnotation
     case deleteAnotation
@@ -20,11 +20,11 @@ enum DiaryOptionsEnum {
 public class ScreenMyDiary {
     
     weak var delegate: DiaryOptionsDelegate?
-    var options = DiaryOptionsEnum.searchScreenDiary
+    var options = DiaryOptionsEnum.search
     
     func run() {
         switch options {
-        case .searchScreenDiary:
+        case .search:
             startSearchScreenDiary()
         case .addAnotation:
             delegate?.addAnotation()
@@ -34,6 +34,7 @@ public class ScreenMyDiary {
             deleteAnotation()
         case .showAnotations:
             delegate?.showAnotations()
+            delegate?.selectAnotationById()
         }
     }
     
@@ -65,7 +66,7 @@ public class ScreenMyDiary {
                 clearScreen()
                 run()
             case "2":
-                options = .searchScreenDiary
+                options = .search
                 clearScreen()
                 run()
             case "3":
