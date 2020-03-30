@@ -12,16 +12,25 @@ enum searchBy{
     case date
     case category
 }
+
+enum edit{
+    case title
+    case note
+    case category
+    case grade
+}
 protocol DiaryOptionsDelegate: class {
     func addAnotation()
     func search(parameter: String, search: searchBy )
     func deleteAnotation(title: String?, index: Int?)
-    func editAnotation(title: String?, index: Int?)
+    func editAnotation(anotation: Anotation, edit: edit, newValue : String)
     func showAnotations()
-    func selectAnotationById()
+    func selectAnotationById() -> Anotation?
+    func showFormattedAnotation(anotation: Anotation)
 }
 
 public class DiaryOptions: DiaryOptionsDelegate {
+    
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
@@ -97,7 +106,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             return
         }
         
-        diario.id = autoIncrementNoteId()
+        diario.id = service.autoIncrement(path: completePathDiary)
         diario.data = stringData
         diario.titulo = tituloAnotacao
         diario.categoria = categoria
@@ -108,7 +117,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         } else {
             let serviceDisciplina = Service<Subject>()
             disciplina.nome = nomeDisciplina
-            disciplina.id = autoIncrementSubjectId()
+            disciplina.id = serviceDisciplina.autoIncrement(path: completePathSubject)
             serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
@@ -156,133 +165,76 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
     }
-    
-    func editAnotation(title: String? = nil, index: Int? = nil) {
-        var diary = service.read(filePath: completePathDiary)
-        // caso o usuario digite um titulo
-        if let _ = title {
-            diary.enumerated().forEach { foundIndex, anotation in
-                if anotation.titulo == title {
-                    var anotationEdited = anotation
-                    anotationEdited.titulo = "EDITED \(anotation.titulo)"
-                    diary.remove(at: foundIndex)
-                    diary.insert(anotationEdited, at: foundIndex)
-                    service.write(array: diary, filePath: completePathDiary)
-                    print("foi editado")
-                } else {
-                    print("este titulo não existe, digite outro:")
-                }
-            }
+
+    func editAnotation(anotation: Anotation, edit: edit, newValue: String) {
+        var newAnotation = Anotation()
+        newAnotation = anotation
+        let service = Service<Anotation>()
+        switch edit {
+        case .category:
+            newAnotation.categoria = newValue
+        case .grade:
+            newAnotation.disciplina.nome = newValue
+        case .note:
+            newAnotation.texto = newValue
+        case .title:
+            newAnotation.titulo = newValue
         }
-        // caso o usuario digite um indice
-        if let index = index {
-            if diary.indices.contains(index) { // if is on range
-                var anotationEdited = diary[index]
-                anotationEdited.titulo = "EDITED \(diary[index].titulo)"
-                diary.remove(at: index)
-                diary.insert(anotationEdited, at: index)
-                service.write(array: diary, filePath: completePathDiary)
-                print("anotação alterada!")
-            } else {
-                print("não existe nada dentro desse range")
-            }
+        service.deleteById(filePath: completePathDiary, id: anotation.id)
+        service.override(object: newAnotation, folderPath: completePathDiary)
+        }
+        
+        func showAnotations() {
+            let diary = service.read(filePath: completePathDiary)
             
+            let anotations = diary.map { (anotation) in
+                return "\(anotation.id) - \(anotation.titulo)"
+            }.reduce(""){ $0 + "\n" + $1 }
+            
+            if !anotations.isEmpty {
+                print("""
+                    Anotações:
+                    \(anotations)
+                    
+                    """)
+            } else {
+                print("você não tem nenhuma anotação, crie uma agora!")
+            }
         }
-    }
-    
-    func showAnotations() {
-        let diary = service.read(filePath: completePathDiary)
         
-        let anotations = diary.map { (anotation) in
-            return "\(anotation.id) - \(anotation.titulo)"
-        }.reduce(""){ $0 + "\n" + $1 }
-        
-        if !anotations.isEmpty {
+        func showFormattedAnotation(anotation: Anotation){
             print("""
-                Anotações:
-                \(anotations)
+                
+                TÍTULO: \(anotation.titulo)
+                DATA: \(anotation.data)
+                DISCIPLINA: \(anotation.disciplina.nome)
+                
+                ANOTAÇÃO: \(anotation.texto)
                 
                 """)
-        } else {
-            print("você não tem nenhuma anotação, crie uma agora!")
         }
         
-        /* not implemented yet [submenu select anotation]
-         
-         let screen_select_anotation = ScreenSelectAnotation()
-         screen_select_anotation.main()
-         */
-    }
-    
-    func formateAnotation(anotation: Anotation){
-        print("""
+        func selectAnotationById() -> Anotation?{
+            let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+            let service = Service<Anotation>()
+            let anotations : [Anotation] = service.read(filePath: completePathDiary)
             
-            TÍTULO: \(anotation.titulo)
-            DATA: \(anotation.data)
-            DISCIPLINA: \(anotation.disciplina.nome)
-            
-            ANOTAÇÃO: \(anotation.texto)
-            
-            """)
-        
-    }
-    
-    func selectAnotationById(){
-        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
-        let service = Service<Anotation>()
-        let anotations : [Anotation] = service.read(filePath: completePathDiary)
-        if(!anotations.isEmpty){
-            print("Digite o id da anotação para visualizá-la: ")
-            guard let input = readLine() else  {
-                return
-            }
-            for anotation in anotations{
-                if (String(anotation.id) == input){
-                    formateAnotation(anotation: anotation)
+            if(!anotations.isEmpty){
+                print("Digite o id para selecionar a anotação: ")
+                if let input = readLine() {
+                    if let input = Int(input) {
+                        for anotation in anotations{
+                            if (anotation.id == input){
+                                return anotation
+                            }
+                        }
+                        
+                    }
+                    
                 }
+                
             }
+            return nil
         }
-    }
-    
-    func autoIncrementNoteId() -> Int{
-        let service = Service<Anotation>()
-        let arrayNotes : [Anotation] = service.read(filePath: completePathDiary)
-        let lengthArrayNotes = arrayNotes.count
-        var id = 0
-        if(lengthArrayNotes == 0){
-            id = 1
-            return id
-        } else {
-            id = arrayNotes[lengthArrayNotes-1].id + 1
-            return id
-        }
-    }
-    func autoIncrementSubjectId() -> Int{
-        let service = Service<Subject>()
-        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
-        let lengthArraySubject = arraySubject.count
-        var id = 0
-        if(lengthArraySubject == 0){
-            id = 1
-            return id
-        } else {
-            id = arraySubject[lengthArraySubject-1].id + 1
-            return id
-        }
-    }
-    //    func autoIncrement<T>(path:String, service: Service<T>) -> Int{
-    //            let array[T] = service.read(filePath: path)
-    //            let lengthArray = array.count
-    //            var id = 0
-    //            if(lengthArray == 0){
-    //                id = 1
-    //                return id
-    //            } else {
-    //                id = array[lengthArray-1].id + 1
-    //                return id
-    //            }
-    //        }
-    
-    
 }
 
