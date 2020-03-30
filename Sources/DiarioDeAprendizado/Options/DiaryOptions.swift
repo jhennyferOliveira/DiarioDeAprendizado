@@ -7,32 +7,53 @@
 
 import Foundation
 
+enum searchBy{
+    case title
+    case date
+    case category
+}
 protocol DiaryOptionsDelegate: class {
-    func searchByDate(date: String)
-    func searchByTitle(title: String)
-    func searchByCategory(category: String)
     func addAnotation()
+    func search(parameter: String, search: searchBy )
     func deleteAnotation(title: String?, index: Int?)
     func editAnotation(title: String?, index: Int?)
     func showAnotations()
 }
 
 public class DiaryOptions: DiaryOptionsDelegate {
-    
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
     let service = Service<Anotation>()
     
-    func searchByDate(date: String) {
+    func search(parameter: String, search: searchBy ){
         let diarios = service.read(filePath: completePathDiary)
-        let anotations = diarios.filter { diario -> Bool in
-            if diario.data == date {
-                return true
+        let anotations : [Anotation]
+        switch search{
+        case .date :
+            anotations = diarios.filter { diario -> Bool in
+                if diario.data == parameter {
+                    return true
+                }
+                return false
             }
-            return false
+            
+        case .title:
+            anotations = diarios.filter { diario -> Bool in
+                if diario.titulo == parameter {
+                    return true
+                }
+                return false
+            }
+            
+        case .category:
+            anotations = diarios.filter { diario -> Bool in
+                if diario.categoria == parameter {
+                    return true
+                }
+                return false
+            }
         }
-        
         let filterNotes = anotations.map { (note) in
             return "\(note.id) - \(note.titulo)"
         }.reduce("") { $0 + "\n" + $1 }
@@ -43,58 +64,13 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 \(filterNotes)\n
                 """)
         } else {
-            print("não foi registrado nenhuma anotacão na data: \(date)")
-        }
-    }
-    
-    func searchByTitle(title: String) {
-        let diarios = service.read(filePath: completePathDiary)
-        let anotations = diarios.filter { diario -> Bool in
-            if diario.titulo == title {
-                return true
-            }
-            return false
-        }
-        
-        let filterNotes = anotations.map { (note) in
-            return note.titulo
-        }.reduce("") { $0 + "\n" + $1 }
-        
-        if !anotations.isEmpty {
-            print("""
-                RESULTADO DA PESQUISA:
-                \(filterNotes)
-                """)
-        } else {
-            print("não foi registrado nenhuma anotacão com o titulo: \(title)")
-        }
-    }
-    
-    func searchByCategory(category: String) {
-        let diarios = service.read(filePath: completePathDiary)
-        let anotations = diarios.filter { diario -> Bool in
-            if diario.categoria == category {
-                return true
-            }
-            return false
-        }
-        
-        let filterNotes = anotations.map { (note) in
-            return "\(note.id) - \(note.titulo)"
-        }.reduce("") { $0 + "\n" + $1 }
-        
-        if !anotations.isEmpty {
-            print("""
-                RESULTADO DA PESQUISA:
-                \(filterNotes)
-                """)
-        } else {
-            print("não foi registrado nenhuma anotacão para categoria: \(category)")
+            print("não foi registrado nenhuma anotacão na data: \(parameter)")
         }
     }
     
     func addAnotation() {
         var diario = Anotation()
+        let gradeOptions = GradeOptions()
         var disciplina = Subject()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
@@ -119,13 +95,14 @@ public class DiaryOptions: DiaryOptionsDelegate {
         guard let categoria = readLine() else {
             return
         }
+        
         diario.id = autoIncrementNoteId()
         diario.data = stringData
         diario.titulo = tituloAnotacao
         diario.categoria = categoria
         diario.texto = anotacao
         
-        if let disciplinaProcurada = searchGradeByName(nome: nomeDisciplina) {
+        if let disciplinaProcurada = gradeOptions.searchGradeByName(nome: nomeDisciplina) {
             diario.disciplina = disciplinaProcurada
         } else {
             let serviceDisciplina = Service<Subject>()
@@ -142,17 +119,17 @@ public class DiaryOptions: DiaryOptionsDelegate {
         var diary = service.read(filePath: completePathDiary)
         
         // caso o usuario digite um titulo
-//        if let _ = title {
-//            let newDiary = diary.filter { anotation -> Bool in
-//                if anotation.titulo == title {
-//                    return true
-//                }
-//                return false
-//            }
-//            service.write(array: newDiary, filePath: completePathDiary)
-//            print("anotacao deletada!")
-//        }
-//
+        //        if let _ = title {
+        //            let newDiary = diary.filter { anotation -> Bool in
+        //                if anotation.titulo == title {
+        //                    return true
+        //                }
+        //                return false
+        //            }
+        //            service.write(array: newDiary, filePath: completePathDiary)
+        //            print("anotacao deletada!")
+        //        }
+        //
         if let _ = title {
             diary.enumerated().forEach { foundIndex, anotation in
                 if anotation.titulo == title {
@@ -223,29 +200,17 @@ public class DiaryOptions: DiaryOptionsDelegate {
             print("""
                 Anotações:
                 \(anotations)
-
+                
                 """)
         } else {
             print("você não tem nenhuma anotação, crie uma agora!")
         }
-
+        
         /* not implemented yet [submenu select anotation]
-
+         
          let screen_select_anotation = ScreenSelectAnotation()
          screen_select_anotation.main()
          */
-    }
-    
-    // essa função deveria estar no grade function mas ela é necessaria aqui então não sei :œ
-    func searchGradeByName(nome : String) -> Subject? {
-        let service_subject = Service<Subject>()
-        let arrayDisciplinas : [Subject] = service_subject.read(filePath: completePathSubject)
-        for disciplina in arrayDisciplinas {
-            if(disciplina.nome == nome) {
-                return disciplina
-            }
-        }
-        return nil
     }
     
     func autoIncrementNoteId() -> Int{
@@ -274,6 +239,19 @@ public class DiaryOptions: DiaryOptionsDelegate {
             return id
         }
     }
-
+    //    func autoIncrement<T>(path:String, service: Service<T>) -> Int{
+    //            let array[T] = service.read(filePath: path)
+    //            let lengthArray = array.count
+    //            var id = 0
+    //            if(lengthArray == 0){
+    //                id = 1
+    //                return id
+    //            } else {
+    //                id = array[lengthArray-1].id + 1
+    //                return id
+    //            }
+    //        }
+    
     
 }
+
