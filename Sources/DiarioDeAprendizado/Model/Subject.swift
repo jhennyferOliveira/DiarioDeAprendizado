@@ -8,8 +8,9 @@
 
 import Foundation
 
-public struct Subject: Codable {
-    var id : Int = 0
+public struct Subject: Codable, Incrementable {
+    
+    public var id : Int = 0
     var nome: String = ""
     var nota1: String? = "-"
     var nota2: String? = "-"
