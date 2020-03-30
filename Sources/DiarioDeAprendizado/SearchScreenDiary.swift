@@ -20,13 +20,13 @@ public class SearchScreenDiary {
         switch options {
         case .title:
             delegate?.search(parameter: input, search: .title)
-            selectAnotationById()
+            delegate?.selectAnotationById()
         case .date:
             delegate?.search(parameter: input, search: .date)
-            selectAnotationById()
+            delegate?.selectAnotationById()
         case .category:
             delegate?.search(parameter: input, search: .category)
-            selectAnotationById()
+            delegate?.selectAnotationById()
         }
     }
     
@@ -43,35 +43,18 @@ public class SearchScreenDiary {
         """)
     }
     
-    func showFormattedAnotation(anotation : Anotation) {
-        
-        print("""
-            
-            TÍTULO: \(anotation.titulo)
-            DATA: \(anotation.data)
-            DISCIPLINA: \(anotation.disciplina.nome)
-            
-            ANOTAÇÃO: \(anotation.texto)
-            
-            """)
-    }
-
-    func selectAnotationById(){
-        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
-        let service = Service<Anotation>()
-        let anotations : [Anotation] = service.read(filePath: completePathDiary)
-        if(!anotations.isEmpty){
-            print("Digite o id da anotação para visualizá-la: ")
-            guard let input = readLine() else  {
-                return
-            }
-            for anotation in anotations{
-                if (String(anotation.id) == input){
-                    showFormattedAnotation(anotation: anotation)
-                }
-            }
-        }
-    }
+//    func showFormattedAnotation(anotation : Anotation) {
+//        
+//        print("""
+//            
+//            TÍTULO: \(anotation.titulo)
+//            DATA: \(anotation.data)
+//            DISCIPLINA: \(anotation.disciplina.nome)
+//            
+//            ANOTAÇÃO: \(anotation.texto)
+//            
+//            """)
+//    }
     
     func main() {
         show()

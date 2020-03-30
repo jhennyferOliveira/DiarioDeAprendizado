@@ -18,6 +18,7 @@ protocol DiaryOptionsDelegate: class {
     func deleteAnotation(title: String?, index: Int?)
     func editAnotation(title: String?, index: Int?)
     func showAnotations()
+    func selectAnotationById()
 }
 
 public class DiaryOptions: DiaryOptionsDelegate {
@@ -211,6 +212,36 @@ public class DiaryOptions: DiaryOptionsDelegate {
          let screen_select_anotation = ScreenSelectAnotation()
          screen_select_anotation.main()
          */
+    }
+    
+    func formateAnotation(anotation: Anotation){
+        print("""
+            
+            TÍTULO: \(anotation.titulo)
+            DATA: \(anotation.data)
+            DISCIPLINA: \(anotation.disciplina.nome)
+            
+            ANOTAÇÃO: \(anotation.texto)
+            
+            """)
+        
+    }
+    
+    func selectAnotationById(){
+        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+        let service = Service<Anotation>()
+        let anotations : [Anotation] = service.read(filePath: completePathDiary)
+        if(!anotations.isEmpty){
+            print("Digite o id da anotação para visualizá-la: ")
+            guard let input = readLine() else  {
+                return
+            }
+            for anotation in anotations{
+                if (String(anotation.id) == input){
+                    formateAnotation(anotation: anotation)
+                }
+            }
+        }
     }
     
     func autoIncrementNoteId() -> Int{
