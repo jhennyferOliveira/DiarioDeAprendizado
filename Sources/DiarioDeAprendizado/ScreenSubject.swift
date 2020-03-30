@@ -106,7 +106,12 @@ public class ScreenSubject {
         
         if let subject = delegate?.search(parameter: input, search: .id) {
             do {
-                if let average = try delegate?.average(subject: subject, weightN1: 1, weightN2: 2) {
+                print("digite os pesos da n1 e n2, respectivamente: ")
+                guard let n1 = Int(readLine()!), let n2 = Int(readLine()!) else {
+                    print("erro! digite um numero valido.")
+                    return
+                }
+                if let average = try delegate?.average(subject: subject, weightN1: n1, weightN2: n2) {
                     print("MEDIA: \(average)")
                 }
             } catch {
