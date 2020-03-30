@@ -7,16 +7,10 @@
 
 import Foundation
 
-enum SearchDiaryOptions {
-    case title
-    case date
-    case category
-}
-
 public class SearchScreenDiary {
     
     weak var delegate: DiaryOptionsDelegate?
-    var options = SearchDiaryOptions.title
+    var options = searchBy.title
     
     func run(chosenOption : String) {
         print("Digite \(chosenOption): ")
@@ -25,12 +19,13 @@ public class SearchScreenDiary {
         }
         switch options {
         case .title:
-            delegate?.searchByTitle(title: input)
+            delegate?.search(parameter: input, search: .title)
+            selectAnotationById()
         case .date:
-            delegate?.searchByDate(date: input)
+            delegate?.search(parameter: input, search: .date)
             selectAnotationById()
         case .category:
-            delegate?.searchByCategory(category: input)
+            delegate?.search(parameter: input, search: .category)
             selectAnotationById()
         }
     }
@@ -53,16 +48,14 @@ public class SearchScreenDiary {
         print("""
             
             TÍTULO: \(anotation.titulo)
-            DATA: \(anotation.data!)
+            DATA: \(anotation.data)
             DISCIPLINA: \(anotation.disciplina.nome)
             
             ANOTAÇÃO: \(anotation.texto)
             
             """)
     }
-    
-    
-    
+
     func selectAnotationById(){
         let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
         let service = Service<Anotation>()

@@ -20,7 +20,7 @@ enum DiaryOptionsEnum {
 public class ScreenMyDiary {
     
     weak var delegate: DiaryOptionsDelegate?
-    var options = DiaryOptionsEnum.searchScreenDiary
+    var options = DiaryOptionsEnum.search
     
     func run() {
         switch options {
