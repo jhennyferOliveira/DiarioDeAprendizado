@@ -107,10 +107,10 @@ public class DiaryOptions: DiaryOptionsDelegate {
             let serviceDisciplina = Service<Subject>()
             disciplina.nome = nomeDisciplina
             disciplina.id = autoIncrementSubjectId()
-            serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+            serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
-        service.override(object: diario, folderPath: folderPath, fileName: "diario.txt")
+        service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
         print("Diario foi criado")
     }
     

@@ -46,7 +46,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         disciplina.nome = nome
         disciplina.id = autoIncrementSubjectId()
         print(completePathSubject)
-        service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+        service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
     
@@ -108,7 +108,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
     }
     
     // error propagation
-    func average(subject: Subject) throws -> Double  {
+    func average(subject: Subject, ) throws -> Double  {
         var scores: [Double] = []
         
         if let nota1 = subject.nota1 {
