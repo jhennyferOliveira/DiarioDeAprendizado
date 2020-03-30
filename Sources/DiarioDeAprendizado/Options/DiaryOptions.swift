@@ -202,7 +202,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 
                 """)
         } else {
-            print("você não tem nenhuma anotação, crie uma agora!")
+            print("você não tem nenhuma anotação, crie uma agora :D")
         }
         
         /* not implemented yet [submenu select anotation]

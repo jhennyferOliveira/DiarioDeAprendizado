@@ -30,7 +30,7 @@ public class ScreenSubject {
         case .calculateAverage:
             calculateAvarege()
         case .createSubject:
-            delegate?.create()
+            createSubject()
         case .deleteSubject:
             delegate?.delete()
         case .editSubject:
@@ -65,23 +65,27 @@ public class ScreenSubject {
             switch input {
             case "1":
                 options = .showSubjects
+                clearScreen()
                 run()
             case "2":
                 options = .showResuls
+                clearScreen()
                 run()
             case "3":
                 options = .calculateAverage
+                clearScreen()
                 run()
             case "4":
                 options = .createSubject
+                clearScreen()
                 run()
             case "5":
                 options = .editSubject
+                clearScreen()
                 run()
             default:
                 print("?")
             }
-            clearScreen()
             show()
         }
     }
@@ -94,7 +98,47 @@ public class ScreenSubject {
         clear.waitUntilExit()
     }
     
-    func calculateAvarege() {
+    private func calculateAvarege() {
+        print("digite o id de que deseja tirar a media")
+        guard let input = readLine() else {
+            return
+        }
         
+        if let subject = delegate?.search(parameter: input, search: .id) {
+            do {
+                if let average = try delegate?.average(subject: subject, weightN1: 1, weightN2: 2) {
+                    print("MEDIA: \(average)")
+                }
+            } catch {
+                print(error)
+            }
+            
+            
+        }
+        
+    }
+    
+    private func createSubject() {
+        print("digite o nome da disciplina:")
+        guard let nome = readLine() else {
+            return
+        }
+        print("ja possui nota ? (s/n)")
+        guard let response = readLine()  {
+            return
+        }
+        
+        switch response {
+        case "s":
+            print("digite sua n1:")
+            guard let n1 = readLine() else { return }
+            print("digite sua n2:")
+            guard let n2 = readLine() else { return }
+            delegate?.create(name: nome, n1: n1, n2: n2, links: nil)
+        case "n":
+            delegate?.create(name: nome)
+        default:
+            print("...")
+        }
     }
 }

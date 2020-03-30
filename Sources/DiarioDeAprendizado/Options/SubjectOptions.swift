@@ -12,12 +12,12 @@ enum SubjectSearchBy {
 }
 
 protocol SubjectOptionsDelegate: class {
-    func create()
+    func create(name: String, n1: String, n2: String, links: String?)
     func search(parameter: String, search: SubjectSearchBy) -> Subject?
     func details()
     func delete()
     func edit()
-    func average(subject: Subject) throws -> Double
+    func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
 }
 
 public class SubjectOptions: SubjectOptionsDelegate {
@@ -26,26 +26,22 @@ public class SubjectOptions: SubjectOptionsDelegate {
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
     let service = Service<Subject>()
     
-    func create() {
+    func create(name: String, n1: String, n2: String, links: String?) {
         var disciplina = Subject()
-        print("digite o nome da disciplina:")
-        guard let nome = readLine() else {
-            return
+        
+        if let n1_double = Double(n1) {
+            if(n1_double > 10.0 || n1_double < 0.0) {
+                
+            }
+            if let n2_double = Double(n2) {
+                disciplina.nota2 = String(format: "%.1f", n2_double)
+            }
+            disciplina.nota1 = String(format: "%.1f", n1_double)
         }
-        print("ja possui nota ? (s/n)")
-        guard let response = readLine() else { return }
-        if response == "s" {
-            print("digite sua n1:")
-            guard let n1 = readLine() else { return }
-            disciplina.nota1 = n1
-            
-            print("digite sua n2:")
-            guard let n2 = readLine() else { return }
-            disciplina.nota2 = n2
-        }
-        disciplina.nome = nome
+        
+        disciplina.nome = name
         disciplina.id = autoIncrementSubjectId()
-        print(completePathSubject)
+        
         service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }
@@ -53,7 +49,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
     
     func search(parameter: String, search: SubjectSearchBy) -> Subject? {
         let subjects = service.read(filePath: completePathSubject)
-        let results: [Subject]
+        var results: [Subject]
         switch search {
         case .name:
             results = subjects.filter { subject -> Bool in
@@ -72,7 +68,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
             }
             
         }
-        let filterResults = subjects.map { (subject) in
+        let filterResults = results.map { (subject) in
             return "\(subject.id) - \(subject.nome)"
         }.reduce("") { $0 + "\n" + $1 }
         
@@ -83,8 +79,9 @@ public class SubjectOptions: SubjectOptionsDelegate {
                 """)
         } else {
             print("não foi encontrado nada para: \(parameter)")
+            return nil
         }
-        return subjects[0] // tem q mudar este retorno
+        return results[0] // tem q mudar este retorno
     }
     
     func details() {
@@ -93,10 +90,15 @@ public class SubjectOptions: SubjectOptionsDelegate {
             return "\(index) - \(subject.nome)"
         }.reduce("") {$0 + "\n" + $1}
         
-        print("""
-            Disciplinas Cadastradas:
-            \(subjects)
-            """)
+        if !subjects.isEmpty {
+            print("""
+                Disciplinas Cadastradas:
+                \(subjects)
+                """)
+        } else {
+            print("você ainda não cadastrou nenhuma discplina.")
+        }
+        
     }
     
     func delete() {
@@ -108,21 +110,25 @@ public class SubjectOptions: SubjectOptionsDelegate {
     }
     
     // error propagation
-    func average(subject: Subject, ) throws -> Double  {
+    func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double  {
         var scores: [Double] = []
         
         if let nota1 = subject.nota1 {
             guard let n1 = Double(nota1) else {
                 throw AverageError.CastingError
             }
-            scores.append(n1)
+            for _ in 0 ... weightN1 {
+                scores.append(n1)
+            }
         }
         
         if let nota2 = subject.nota2 {
             guard let n2 = Double(nota2) else {
                 throw AverageError.CastingError
             }
-            scores.append(n2)
+            for _ in 0 ... weightN2 {
+                scores.append(n2)
+            }
         }
         return mean(scores: scores)
     }
@@ -146,8 +152,13 @@ public class SubjectOptions: SubjectOptionsDelegate {
     
 }
 
-
 enum AverageError: Error {
     case insuficientScores
     case CastingError
+}
+
+extension SubjectOptionsDelegate {
+    func create(name: String) {
+        create(name: name, n1: "", n2: "", links: nil)
+    }
 }
