@@ -124,7 +124,7 @@ public class ScreenSubject {
             return
         }
         print("ja possui nota ? (s/n)")
-        guard let response = readLine()  {
+        guard let response = readLine() else {
             return
         }
         

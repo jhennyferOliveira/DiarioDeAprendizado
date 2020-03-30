@@ -10,5 +10,11 @@
     "id" : 2,
     "nome" : "Historia",
     "nota2" : "10.0"
+  },
+  {
+    "nota1" : "2.0",
+    "id" : 3,
+    "nome" : "Geografia",
+    "nota2" : "10.0"
   }
 ]

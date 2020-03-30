@@ -31,9 +31,14 @@ public class SubjectOptions: SubjectOptionsDelegate {
         
         if let n1_double = Double(n1) {
             if(n1_double > 10.0 || n1_double < 0.0) {
-                
+                print("n1 com valor invalido, não foi possivel salvar a disciplina")
+                return
             }
             if let n2_double = Double(n2) {
+                if(n2_double > 10.0 || n2_double < 0.0) {
+                    print("n2 com valor invalido, não foi possivel salvar a disciplina")
+                    return
+                }
                 disciplina.nota2 = String(format: "%.1f", n2_double)
             }
             disciplina.nota1 = String(format: "%.1f", n1_double)
