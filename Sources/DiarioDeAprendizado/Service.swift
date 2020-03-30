@@ -47,7 +47,7 @@ public final class Service<Type: Codable> {
         }
     }
 
-    func override(object: Type, folderPath: String, fileName: String? = nil) {
+    func save(object: Type, folderPath: String, fileName: String? = nil) {
         encoder.outputFormatting = .prettyPrinted
         var filePath = folderPath
         if let filename = fileName {

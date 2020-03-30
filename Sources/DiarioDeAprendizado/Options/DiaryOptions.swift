@@ -7,14 +7,12 @@
 
 import Foundation
 
-enum searchBy{
-    case title
-    case date
-    case category
+enum DiarySearchBy {
+    case title, date, category
 }
 protocol DiaryOptionsDelegate: class {
     func addAnotation()
-    func search(parameter: String, search: searchBy )
+    func search(parameter: String, search: DiarySearchBy)
     func deleteAnotation(title: String?, index: Int?)
     func editAnotation(title: String?, index: Int?)
     func showAnotations()
@@ -27,11 +25,11 @@ public class DiaryOptions: DiaryOptionsDelegate {
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
     let service = Service<Anotation>()
     
-    func search(parameter: String, search: searchBy ){
+    func search(parameter: String, search: DiarySearchBy) {
         let diarios = service.read(filePath: completePathDiary)
         let anotations : [Anotation]
-        switch search{
-        case .date :
+        switch search {
+        case .date:
             anotations = diarios.filter { diario -> Bool in
                 if diario.data == parameter {
                     return true
@@ -65,13 +63,13 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 \(filterNotes)\n
                 """)
         } else {
-            print("não foi registrado nenhuma anotacão na data: \(parameter)")
+            print("nenhum resultado para: \(parameter)")
         }
     }
     
     func addAnotation() {
         var diario = Anotation()
-        let gradeOptions = GradeOptions()
+        let subjectOptions = SubjectOptions()
         var disciplina = Subject()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy"
@@ -103,16 +101,16 @@ public class DiaryOptions: DiaryOptionsDelegate {
         diario.categoria = categoria
         diario.texto = anotacao
         
-        if let disciplinaProcurada = gradeOptions.searchGradeByName(nome: nomeDisciplina) {
+        if let disciplinaProcurada = subjectOptions.search(parameter: nomeDisciplina, search: .name) {
             diario.disciplina = disciplinaProcurada
         } else {
             let serviceDisciplina = Service<Subject>()
             disciplina.nome = nomeDisciplina
             disciplina.id = autoIncrementSubjectId()
-            serviceDisciplina.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+            serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
         }
-        service.override(object: diario, folderPath: folderPath, fileName: "diario.txt")
+        service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
         print("Diario foi criado")
     }
     
@@ -204,7 +202,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 
                 """)
         } else {
-            print("você não tem nenhuma anotação, crie uma agora!")
+            print("você não tem nenhuma anotação, crie uma agora :D")
         }
         
         /* not implemented yet [submenu select anotation]
@@ -236,7 +234,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             guard let input = readLine() else  {
                 return
             }
-            for anotation in anotations{
+            for anotation in anotations {
                 if (String(anotation.id) == input){
                     formateAnotation(anotation: anotation)
                 }
@@ -244,12 +242,12 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
     }
     
-    func autoIncrementNoteId() -> Int{
+    func autoIncrementNoteId() -> Int {
         let service = Service<Anotation>()
         let arrayNotes : [Anotation] = service.read(filePath: completePathDiary)
         let lengthArrayNotes = arrayNotes.count
         var id = 0
-        if(lengthArrayNotes == 0){
+        if(lengthArrayNotes == 0) {
             id = 1
             return id
         } else {
@@ -257,12 +255,12 @@ public class DiaryOptions: DiaryOptionsDelegate {
             return id
         }
     }
-    func autoIncrementSubjectId() -> Int{
+    func autoIncrementSubjectId() -> Int {
         let service = Service<Subject>()
         let arraySubject : [Subject] = service.read(filePath: completePathSubject)
         let lengthArraySubject = arraySubject.count
         var id = 0
-        if(lengthArraySubject == 0){
+        if(lengthArraySubject == 0) {
             id = 1
             return id
         } else {
