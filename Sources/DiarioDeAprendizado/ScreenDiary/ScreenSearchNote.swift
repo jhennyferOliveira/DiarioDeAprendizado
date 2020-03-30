@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ScreenSearchDiary {
+public class ScreenSearchNote {
     
     weak var delegate: DiaryOptionsDelegate?
     var options = searchBy.title

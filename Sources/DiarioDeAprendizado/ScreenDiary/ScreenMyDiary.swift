@@ -18,7 +18,7 @@ enum DiaryOptionsEnum {
 }
 
 public class ScreenMyDiary {
-    
+    let service = Service<Anotation>()
     weak var delegate: DiaryOptionsDelegate?
     var options = DiaryOptionsEnum.search
     
@@ -29,7 +29,7 @@ public class ScreenMyDiary {
         case .addAnotation:
             delegate?.addAnotation()
         case .editAnotation:
-            edit()
+            startEditScreenDiary()
         case .deleteAnotation:
             deleteAnotation()
         case .showAnotations:
@@ -55,19 +55,7 @@ public class ScreenMyDiary {
         0 - voltar
         """)
     }
-    
-    func showSubmenuEdit() {
-        print("""
 
-        EDITAR:
-
-        1 - título
-        2 - texto
-        3 - nome da disciplina
-        4 - categoria
-
-        """)
-    }
     func main() {
         show()
         while let input = readLine() {
@@ -78,23 +66,23 @@ public class ScreenMyDiary {
             switch input {
             case "1":
                 options = .showAnotations
-                clearScreen()
+                service.clearScreen()
                 run()
             case "2":
                 options = .search
-                clearScreen()
+                service.clearScreen()
                 run()
             case "3":
                 options = .addAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             case "4":
                 options = .editAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             case "5":
                 options = .deleteAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             default:
                 print("?")
@@ -110,9 +98,16 @@ public class ScreenMyDiary {
         clear.launch()
         clear.waitUntilExit()
     }
-    // function to call submenu search diary
+
     private func startSearchScreenDiary() {
-        let screen = SearchScreenDiary()
+        let screen = ScreenSearchNote()
+        let options = DiaryOptions()
+        screen.delegate = options
+        screen.main()
+    }
+    
+    private func startEditScreenDiary() {
+        let screen = ScreenEditNote()
         let options = DiaryOptions()
         screen.delegate = options
         screen.main()
@@ -132,33 +127,6 @@ public class ScreenMyDiary {
         }
     }
     
-    
-    private func edit() {
-        delegate?.showAnotations()
-        guard let anotation = delegate?.selectAnotationById()else{
-            return
-        }
-        showSubmenuEdit()
-        
-        guard let input = readLine() else{ return
-        }
-        print("Digite o novo valor:")
-        guard let newValue = readLine() else{
-            return
-        }
-        switch input {
-        case "1":
-            delegate?.editAnotation(anotation: anotation, edit: .title, newValue: newValue)
-        case "2":
-            delegate?.editAnotation(anotation: anotation, edit: .note, newValue: newValue)
-        case "3":
-            delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
-        case "4":
-            delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
-        default:
-            print("opcao invalida")
-        }
-    }
 }
 
 

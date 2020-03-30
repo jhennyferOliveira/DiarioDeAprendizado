@@ -7,11 +7,9 @@
 
 import Foundation
 
-
-class ScreenEditAnotation(){
+class ScreenEditNote{
 
     weak var delegate: DiaryOptionsDelegate?
-    var options = edit.category
     
     func showSubmenuEdit() {
         print("""
@@ -26,7 +24,8 @@ class ScreenEditAnotation(){
         """)
     }
 
-    func edit() {
+    func main() {
+         showSubmenuEdit()
          delegate?.showAnotations()
          guard let anotation = delegate?.selectAnotationById()else{
              return
@@ -64,5 +63,4 @@ class ScreenEditAnotation(){
     
     
     
-    
-}
+
