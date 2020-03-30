@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Service<Type: Codable> {
+public final class Service<Type: Codable & Incrementable> {
     
     let fileManager = FileManager.default
     let decoder = JSONDecoder()
@@ -46,7 +46,20 @@ public final class Service<Type: Codable> {
             print(error.localizedDescription)
         }
     }
-
+    
+    func autoIncrement(path:String) -> Int{
+        let array = read(filePath: path)
+        let lengthArray = array.count
+        var id = 0
+        if(lengthArray == 0){
+            id = 1
+            return id
+        } else {
+            id = array[lengthArray-1].id + 1
+            return id
+        }
+    }
+    
     func override(object: Type, folderPath: String, fileName: String? = nil) {
         encoder.outputFormatting = .prettyPrinted
         var filePath = folderPath
@@ -71,11 +84,30 @@ public final class Service<Type: Codable> {
         if fileManager.fileExists(atPath: filePath) {
             do {
                 try fileManager.removeItem(atPath: filePath)
-           } catch {
-            print(error.localizedDescription)
-           }
+            } catch {
+                print(error.localizedDescription)
+            }
         } else {
             print("arquivo não existe")
+        }
+    }
+    
+    func deleteById(filePath: String, id: Int) {
+        if fileManager.fileExists(atPath: filePath) {
+            var array = read(filePath: filePath)
+            if array.count>1{
+                let length = array.count - 1
+                for i in 0...length{
+                    if array[i].id == id{
+                        array.remove(at: i)
+                        write(array: array, filePath: filePath)
+                    }
+                }
+            } else{
+                array.remove(at: 0)
+                write(array: array, filePath: filePath)
+            }
+            
         }
     }
     
@@ -92,5 +124,4 @@ public final class Service<Type: Codable> {
             print(error.localizedDescription)
         }
     }
-    
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class SearchScreenDiary {
+public class ScreenSearchDiary {
     
     weak var delegate: DiaryOptionsDelegate?
     var options = searchBy.title
@@ -17,17 +17,19 @@ public class SearchScreenDiary {
         guard let input = readLine() else  {
             return
         }
+        
         switch options {
         case .title:
             delegate?.search(parameter: input, search: .title)
-            delegate?.selectAnotationById()
         case .date:
             delegate?.search(parameter: input, search: .date)
-            delegate?.selectAnotationById()
         case .category:
             delegate?.search(parameter: input, search: .category)
-            delegate?.selectAnotationById()
         }
+        guard let anotation = delegate?.selectAnotationById() else{
+            return
+        }
+        delegate?.showFormattedAnotation(anotation: anotation)
     }
     
     func show() {
@@ -42,19 +44,6 @@ public class SearchScreenDiary {
         0 - voltar
         """)
     }
-    
-//    func showFormattedAnotation(anotation : Anotation) {
-//        
-//        print("""
-//            
-//            TÍTULO: \(anotation.titulo)
-//            DATA: \(anotation.data)
-//            DISCIPLINA: \(anotation.disciplina.nome)
-//            
-//            ANOTAÇÃO: \(anotation.texto)
-//            
-//            """)
-//    }
     
     func main() {
         show()
