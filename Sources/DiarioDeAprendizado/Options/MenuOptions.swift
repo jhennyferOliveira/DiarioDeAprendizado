@@ -17,8 +17,8 @@ protocol MenuOptionsDelegate: class {
 public class MenuOptions: MenuOptionsDelegate {
     
     func startScreenGrade() {
-        let screen = ScreenGrades()
-        let options = GradeOptions()
+        let screen = ScreenSubject()
+        let options = SubjectOptions()
         
         screen.delegate = options
         screen.main()
