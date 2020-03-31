@@ -41,7 +41,7 @@ public class GradeOptions: GradeOptionsDelegate {
         disciplina.nome = nome
         disciplina.id = service.autoIncrement(path: completePathSubject)
         print(completePathSubject)
-        service.override(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+        service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         // limparTela()
         print("sua disciplina foi salva no arquivo disciplina.txt")
     }

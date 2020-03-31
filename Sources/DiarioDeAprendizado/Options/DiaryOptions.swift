@@ -180,7 +180,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             newAnotation.titulo = newValue
         }
         service.deleteById(filePath: completePathDiary, id: anotation.id)
-        service.override(object: newAnotation, folderPath: completePathDiary)
+        service.save(object: newAnotation, folderPath: completePathDiary)
         }
         
         func showAnotations() {
