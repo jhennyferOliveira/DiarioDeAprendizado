@@ -26,6 +26,16 @@ public class User: Codable, Incrementable {
         self.nome = nome
         self.matricula = matricula
         self.senha = senha
-        self.disciplinas = [Subject(id: 2, nome: "", nota1: "", nota2: "|", frequencia: "", links: "")]
+        self.disciplinas = [Subject]()
+    }
+    
+    public init() {
+        id = 1
+        self.uuid = ""
+        self.username = ""
+        self.nome = ""
+        self.matricula = ""
+        self.senha = ""
+        self.disciplinas = [Subject]()
     }
 }

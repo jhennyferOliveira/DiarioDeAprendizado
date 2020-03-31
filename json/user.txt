@@ -4,7 +4,7 @@
     "id" : 1,
     "matricula" : "20172045050590",
     "uuid" : "generate uiid",
-    "username" : "",
+    "username" : "teste",
     "nome" : "vinicius mesquta",
     "disciplinas" : [
       {

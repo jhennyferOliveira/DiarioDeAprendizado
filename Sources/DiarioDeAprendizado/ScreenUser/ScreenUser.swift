@@ -27,7 +27,7 @@ public class ScreenUser {
         case .showInformation:
             delegate?.details()
         case .editInformation:
-            delegate?.editInformation()
+            startEditUser()
         case .saveInformation:
             register()
         case .login:
@@ -71,14 +71,20 @@ public class ScreenUser {
                 run()
             case "4":
                 options = .login
-                util.system("clear")
                 run()
             default:
                 print("?")
         }
-        util.system("clear")
+        // util.system("clear")
         show()
         }
+    }
+    
+    private startEditUser() {
+        let screen = ScreenEditUser()
+        let options = SubjectOptions()
+        screen.delegate = options
+        screen.main()
     }
     
     /* criar um menu para esta funcao */
@@ -107,6 +113,13 @@ public class ScreenUser {
             return
         }
         let hash = password.md5() // hashing password
-        delegate?.checkInformation(username: username, password: hash)
+        let result = delegate?.checkInformation(username: username, password: hash)
+        util.system("clear")
+        
+        if result == true {
+            print("Sucesso em login!")
+        } else {
+            print("login erro!")
+        }
     }
 }

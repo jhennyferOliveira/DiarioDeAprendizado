@@ -10,9 +10,22 @@ import CryptoSwift
 
 protocol UserOptionsDelegate: class {
     func details()
-    func editInformation()
+    func editInformation(user: User, edit: EditUserBy, newValue: String)
     func saveInformation(matricula: String, password: String)
     func checkInformation(username: String, password: String) -> Bool
+}
+
+enum AuthenticationError: Error {
+    case refusedLogin
+    case ecryptError
+    case decryptError
+}
+
+enum EditUserBy {
+    case title
+    case note
+    case category
+    case grade
 }
 
 public class UserOptions: UserOptionsDelegate {
@@ -27,19 +40,34 @@ public class UserOptions: UserOptionsDelegate {
         
         print("""
             olá \(currentUser.nome)
-            Voce esta logado como \(currentUser)
+            Voce esta logado como \(currentUser.username)
         """)
     }
     
-    func editInformation() {
+    func editInformation(user: User, edit: EditUserBy, newValue: String) {
         /* not implemented yet **/
+        var editedUser = user
+        
+        switch edit {
+        case .category:
+            newAnotation.categoria = newValue
+        case .grade:
+            newAnotation.disciplina.nome = newValue
+        case .note:
+            newAnotation.texto = newValue
+        case .title:
+            newAnotation.titulo = newValue
+        }
+        service.deleteById(filePath: completePathUser, id: user.id)
+        service.save(object: editedUser, folderPath: completePathUser)
+        
     }
 
     /* faltam ajustes */
     func saveInformation(matricula: String, password: String) {
         let users = service.read(filePath: completePathUser)
         if users.isEmpty {
-            let user = User(username: "", nome: "vinicius mesquta", matricula: matricula, senha: password)
+            let user = User(username: "teste", nome: "vinicius mesquta", matricula: matricula, senha: password)
             service.save(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
             print("ja existe o registro, deseja cadastrar mais um usuario?")
