@@ -96,7 +96,7 @@ public final class Service<Type: Codable & Incrementable> {
     func deleteById(filePath: String, id: Int) {
         if fileManager.fileExists(atPath: filePath) {
             var array = read(filePath: filePath)
-            if array.count>1{
+            if !array.isEmpty{
                 let length = array.count - 1
                 for i in 0...length{
                     if array[i].id == id{
@@ -104,9 +104,6 @@ public final class Service<Type: Codable & Incrementable> {
                         write(array: array, filePath: filePath)
                     }
                 }
-            } else{
-                array.remove(at: 0)
-                write(array: array, filePath: filePath)
             }
             
         }
