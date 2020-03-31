@@ -45,7 +45,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         }
         
         disciplina.nome = name
-        disciplina.id = autoIncrementSubjectId()
+        disciplina.id = service.autoIncrement(path: completePathSubject)
         
         service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
@@ -89,7 +89,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         return results[0] // tem q mudar este retorno
     }
     
-    func details() {
+    func details(){
         let grades = service.read(filePath: completePathSubject)
         let subjects = grades.enumerated().map { (index, subject) in
             return "\(index) - \(subject.nome)"
@@ -113,6 +113,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
     func edit() {
         
     }
+    
     
     // error propagation
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double  {
@@ -140,19 +141,6 @@ public class SubjectOptions: SubjectOptionsDelegate {
     
     private func mean(scores: [Double]) -> Double {
         return scores.reduce(0.0, +) / Double(scores.count)
-    }
-    
-    func autoIncrementSubjectId() -> Int {
-        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
-        let lengthArraySubject = arraySubject.count
-        var id = 0
-        if(lengthArraySubject == 0){
-            id = 1
-            return id
-        } else {
-            id = arraySubject[lengthArraySubject-1].id + 1
-            return id
-        }
     }
     
 }
