@@ -119,6 +119,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             disciplina.id = serviceDisciplina.autoIncrement(path: completePathSubject)
             serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
+            print("Disciplina \(disciplina.nome) criada")
         }
         service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
         print("Diario foi criado")

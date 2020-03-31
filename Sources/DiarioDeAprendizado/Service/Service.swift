@@ -97,12 +97,18 @@ public final class Service<Type: Codable & Incrementable> {
         if fileManager.fileExists(atPath: filePath) {
             var array = read(filePath: filePath)
             if !array.isEmpty{
+                if array.count>1{
                 let length = array.count - 1
                 for i in 0...length{
                     if array[i].id == id{
                         array.remove(at: i)
                         write(array: array, filePath: filePath)
+                        break
                     }
+                }
+                } else {
+                    array.remove(at: 0)
+                    write(array: array, filePath: filePath)
                 }
             }
             
