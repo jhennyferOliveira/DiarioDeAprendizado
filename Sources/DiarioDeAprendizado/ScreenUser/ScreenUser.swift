@@ -30,7 +30,8 @@ public class ScreenUser {
             delegate?.editInformation()
         case .saveInformation:
             register()
-        
+        case .login:
+            login()
         }
     }
     
