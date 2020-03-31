@@ -28,6 +28,10 @@ public class ScreenSubject {
             delegate?.details()
         case .showResuls:
             delegate?.details()
+            guard let subject = delegate?.selectSubjectById() else{
+                return
+            }
+            delegate?.showFormattedSubject(subject: subject)
         case .calculateAverage:
             calculateAvarege()
         case .createSubject:
@@ -51,14 +55,14 @@ public class ScreenSubject {
 
         MENU DISCIPLINA:
 
-        1 - mostrar disciplina
-        2 - visualizar notas
-        3 - calcular media
-        4 - cadastrar disciplina
-        5 - deletar disciplina
-        6 - editar disciplina
+        1 - Visualizar disciplinas
+        2 - Visualizar notas
+        3 - Calcular média
+        4 - Cadastrar disciplina
+        5 - Deletar disciplina
+        6 - Editar disciplina
 
-        0 - voltar
+        0 - Voltar
         """)
     }
     
@@ -101,47 +105,55 @@ public class ScreenSubject {
             show()
         }
     }
-
+    
     private func calculateAvarege() {
-        print("digite o id de que deseja tirar a media")
-        guard let input = readLine() else {
+        delegate?.details()
+        guard let subject = delegate?.selectSubjectById() else{
             return
         }
+        delegate?.showFormattedSubject(subject: subject)
         
-        if let subject = delegate?.search(parameter: input, search: .id) {
+        if(subject.nota1 == "-" || subject.nota2 == "-"){
+            print("Operação inválida! Cadastre as notas da disciplina.")
+        } else {
             do {
-                print("digite os pesos da n1 e n2, respectivamente: ")
-                guard let n1 = Int(readLine()!), let n2 = Int(readLine()!) else {
-                    print("erro! digite um numero valido.")
+                print("Digite o peso da n1: ")
+                guard let n1 = Int(readLine()!) else {
+                    print("Erro! Digite um número válido.")
                     return
                 }
+                
+                print("Digite o peso da n2: ")
+                guard let n2 = Int(readLine()!)else {
+                    print("Erro! Digite um número válido.")
+                    return
+                }
+                
                 if let average = try delegate?.average(subject: subject, weightN1: n1, weightN2: n2) {
-                    print("MEDIA: \(average)")
+                    print("MÉDIA: \(average)")
                 }
             } catch {
-                print(error)
+                print(error.localizedDescription)
             }
             
-            
         }
-        
     }
     
     private func createSubject() {
-        print("digite o nome da disciplina:")
+        print("Digite o nome da disciplina:")
         guard let nome = readLine() else {
             return
         }
-        print("ja possui nota ? (s/n)")
+        print("Já possui nota ? (s/n)")
         guard let response = readLine() else {
             return
         }
         
         switch response {
         case "s":
-            print("digite sua n1:")
+            print("Digite sua n1:")
             guard let n1 = readLine() else { return }
-            print("digite sua n2:")
+            print("Digite sua n2:")
             guard let n2 = readLine() else { return }
             delegate?.create(name: nome, n1: n1, n2: n2, links: nil)
         case "n":
