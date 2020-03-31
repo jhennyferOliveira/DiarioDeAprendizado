@@ -36,11 +36,11 @@ public class ScreenSearchNote {
     func show() {
         print("""
 
-        PESQUISAR DIARIO:
+        PESQUISAR DIARIO POR:
 
-        1 - por titulo
-        2 - por data
-        3 - por categoria
+        1 - Título
+        2 - Data
+        3 - Categoria
 
         0 - voltar
         """)

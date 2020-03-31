@@ -36,11 +36,11 @@ public class ScreenMenu {
         
         MENU PRINCIPAL:
 
-        1 - meu diario
-        2 - disciplinas
-        3 - perfil
+        1 - Meu diario
+        2 - Disciplinas
+        3 - Perfil
 
-        0 - fechar
+        0 - Fechar
 
         """)
     }

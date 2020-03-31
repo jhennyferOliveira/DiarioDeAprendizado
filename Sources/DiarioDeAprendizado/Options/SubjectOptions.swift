@@ -39,12 +39,12 @@ public class SubjectOptions: SubjectOptionsDelegate {
         
         if let n1_double = Double(n1) {
             if(n1_double > 10.0 || n1_double < 0.0) {
-                print("n1 com valor invalido, não foi possivel salvar a disciplina")
+                print("Nota 1 com valor inválido, não foi possível salvar a disciplina")
                 return
             }
             if let n2_double = Double(n2) {
                 if(n2_double > 10.0 || n2_double < 0.0) {
-                    print("n2 com valor invalido, não foi possivel salvar a disciplina")
+                    print("Nota 2 com valor inválido, não foi possível salvar a disciplina")
                     return
                 }
                 disciplina.nota2 = String(format: "%.1f", n2_double)
@@ -56,7 +56,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         disciplina.id = service.autoIncrement(path: completePathSubject)
         
         service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
-        print("sua disciplina foi salva no arquivo disciplina.txt")
+        print("A disciplina foi salva no arquivo disciplina.txt")
     }
     
     
@@ -91,7 +91,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
                 \(filterResults)\n
                 """)
         } else {
-            print("não foi encontrado nada para: \(parameter)")
+            print("Não foi encontrado nenhum resultado para: \(parameter)")
             return nil
         }
         return results[0] // tem q mudar este retorno
@@ -109,7 +109,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
                 \(subjects)
                 """)
         } else {
-            print("você ainda não cadastrou nenhuma discplina.")
+            print("Você ainda não cadastrou nenhuma discplina")
         }
         
     }

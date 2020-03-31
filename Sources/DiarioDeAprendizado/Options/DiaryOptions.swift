@@ -73,7 +73,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 """)
             return true
         } else {
-            print("nenhum resultado para: \(parameter)")
+            print("Nenhum resultado para: \(parameter)")
             return false
         }
     }
@@ -163,7 +163,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                     
                     """)
             } else {
-                print("você não tem nenhuma anotação, crie uma agora :D")
+                print("Você não tem nenhuma anotação, crie uma agora :D")
             }
         }
         
