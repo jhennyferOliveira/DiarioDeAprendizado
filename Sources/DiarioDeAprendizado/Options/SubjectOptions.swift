@@ -21,7 +21,7 @@ protocol SubjectOptionsDelegate: class {
     func create(name: String, n1: String, n2: String, links: String?)
     func search(parameter: String, search: SubjectSearchBy) -> Subject?
     func details()
-    func delete()
+    func delete(subjectId:Int)
     func edit(subject: Subject, edit: Edit, newValue: String)
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
     func selectSubjectById() -> Subject?
@@ -113,8 +113,8 @@ public class SubjectOptions: SubjectOptionsDelegate {
         
     }
     
-    func delete() {
-        
+    func delete(subjectId:Int) {
+        service.deleteById(filePath: completePathSubject, id: subjectId)
     }
     
     

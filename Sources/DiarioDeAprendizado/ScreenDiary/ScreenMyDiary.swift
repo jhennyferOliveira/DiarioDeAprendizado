@@ -107,16 +107,10 @@ public class ScreenMyDiary {
     
     private func deleteAnotation() {
         delegate?.showAnotations()
-        print("digite um indice ou nome para deletar")
-        guard let input = readLine() else {
+        guard let anotation = delegate?.selectAnotationById() else{
             return
         }
-        // if its number
-        if let index = Int(input) {
-            delegate?.deleteAnotation(title: nil, index: index)
-        } else {
-            delegate?.deleteAnotation(title: input, index: nil)
-        }
+        delegate?.deleteAnotation(noteId: anotation.id)
     }
     
 }

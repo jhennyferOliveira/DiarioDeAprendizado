@@ -33,7 +33,7 @@ public class ScreenSubject {
         case .createSubject:
             createSubject()
         case .deleteSubject:
-            delegate?.delete()
+            deleteSubject()
         case .editSubject:
             startScreenEditSubject()
         }
@@ -149,5 +149,13 @@ public class ScreenSubject {
         default:
             print("...")
         }
+    }
+    
+    private func deleteSubject() {
+        delegate?.details()
+        guard let subject = delegate?.selectSubjectById() else{
+            return
+        }
+        delegate?.delete(subjectId: subject.id)
     }
 }
