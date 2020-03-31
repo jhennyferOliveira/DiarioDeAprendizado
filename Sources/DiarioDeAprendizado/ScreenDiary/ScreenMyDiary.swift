@@ -18,7 +18,7 @@ enum DiaryOptionsEnum {
 }
 
 public class ScreenMyDiary {
-    
+    let service = Service<Anotation>()
     weak var delegate: DiaryOptionsDelegate?
     var options = DiaryOptionsEnum.search
     
@@ -29,12 +29,15 @@ public class ScreenMyDiary {
         case .addAnotation:
             delegate?.addAnotation()
         case .editAnotation:
-            editAnotation()
+            startEditScreenDiary()
         case .deleteAnotation:
             deleteAnotation()
         case .showAnotations:
             delegate?.showAnotations()
-            delegate?.selectAnotationById()
+            guard let anotation = delegate?.selectAnotationById() else{
+                return
+            }
+            delegate?.showFormattedAnotation(anotation: anotation)
         }
     }
     
@@ -52,52 +55,51 @@ public class ScreenMyDiary {
         0 - voltar
         """)
     }
-    
+
     func main() {
         show()
         while let input = readLine() {
-         
-         guard input != "0" else {
-             break
-         }
-        switch input {
+            
+            guard input != "0" else {
+                break
+            }
+            switch input {
             case "1":
                 options = .showAnotations
-                clearScreen()
+                service.clearScreen()
                 run()
             case "2":
                 options = .search
-                clearScreen()
+                service.clearScreen()
                 run()
             case "3":
                 options = .addAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             case "4":
                 options = .editAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             case "5":
                 options = .deleteAnotation
-                clearScreen()
+                service.clearScreen()
                 run()
             default:
                 print("?")
+            }
+            show()
         }
-        show()
-        }
+    }
+
+    private func startSearchScreenDiary() {
+        let screen = ScreenSearchNote()
+        let options = DiaryOptions()
+        screen.delegate = options
+        screen.main()
     }
     
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
-    }
-    // function to call submenu search diary
-    private func startSearchScreenDiary() {
-        let screen = SearchScreenDiary()
+    private func startEditScreenDiary() {
+        let screen = ScreenEditNote()
         let options = DiaryOptions()
         screen.delegate = options
         screen.main()
@@ -117,17 +119,6 @@ public class ScreenMyDiary {
         }
     }
     
-    private func editAnotation() {
-        delegate?.showAnotations()
-        print("digite um indice ou nome para alterar")
-        guard let input = readLine() else {
-            return
-        }
-
-        if let index = Int(input) {
-            delegate?.editAnotation(title: nil, index: index)
-        } else {
-            delegate?.editAnotation(title: input, index: nil)
-        }
-    }
 }
+
+

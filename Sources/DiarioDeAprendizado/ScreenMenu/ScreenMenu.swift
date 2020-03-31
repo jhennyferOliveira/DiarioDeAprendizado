@@ -16,6 +16,7 @@ enum MenuOptionsEnum {
 
 public class ScreenMenu {
     
+    let service = Service<Anotation>()
     weak var delegate: MenuOptionsDelegate?
     var options = MenuOptionsEnum.screenMyDiary
     
@@ -45,7 +46,7 @@ public class ScreenMenu {
     }
     
     func main() {
-        clearScreen()
+        service.clearScreen()
         show()
         while let input = readLine() {
 
@@ -56,30 +57,21 @@ public class ScreenMenu {
             switch input {
             case "1":
                 options = .screenMyDiary
-                clearScreen()
+                service.clearScreen()
                 run()
             case "2":   
                 options = .screenGrade
-                clearScreen()
+                service.clearScreen()
                 run()
             case "3":
                 options = .screenPerfil
-                clearScreen()
+                service.clearScreen()
                 run()
             default:
                 print("?")
             }
-            clearScreen()
+            service.clearScreen()
             show()
         }
     }
-    
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
-    }
-    
 }

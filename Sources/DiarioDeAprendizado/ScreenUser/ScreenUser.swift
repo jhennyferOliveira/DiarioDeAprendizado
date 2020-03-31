@@ -14,6 +14,7 @@ enum UserOptionEnum {
 
 public class ScreenUser {
     
+    let service = Service<Anotation>()
     weak var delegate: UserOptionsDelegate?
     var options = UserOptionEnum.editInformation
     
@@ -50,16 +51,8 @@ public class ScreenUser {
             default:
                 print("?")
         }
-        clearScreen()
+        service.clearScreen()
         show()
         }
-    }
-    
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
     }
 }
