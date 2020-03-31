@@ -80,9 +80,9 @@ public class ScreenUser {
         }
     }
     
-    private startEditUser() {
+    private func startEditUser() {
         let screen = ScreenEditUser()
-        let options = SubjectOptions()
+        let options = UserOptions()
         screen.delegate = options
         screen.main()
     }

@@ -22,10 +22,8 @@ enum AuthenticationError: Error {
 }
 
 enum EditUserBy {
-    case title
-    case note
-    case category
-    case grade
+    case name
+    case password
 }
 
 public class UserOptions: UserOptionsDelegate {
@@ -46,17 +44,13 @@ public class UserOptions: UserOptionsDelegate {
     
     func editInformation(user: User, edit: EditUserBy, newValue: String) {
         /* not implemented yet **/
-        var editedUser = user
+        let editedUser = user
         
         switch edit {
-        case .category:
-            newAnotation.categoria = newValue
-        case .grade:
-            newAnotation.disciplina.nome = newValue
-        case .note:
-            newAnotation.texto = newValue
-        case .title:
-            newAnotation.titulo = newValue
+        case .name:
+            editedUser.nome = newValue
+        case .password:
+            editedUser.senha = newValue
         }
         service.deleteById(filePath: completePathUser, id: user.id)
         service.save(object: editedUser, folderPath: completePathUser)
