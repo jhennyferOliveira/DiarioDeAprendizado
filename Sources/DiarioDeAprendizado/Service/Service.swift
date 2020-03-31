@@ -24,9 +24,10 @@ public final class Service<Type: Codable & Incrementable> {
                 let jsonData = json.data(using: .utf8)!
                 
                 arrayType = try decoder.decode([Type].self, from: jsonData)
+                arrayType.sort(){$0.id < $1.id}
                 return arrayType
             } catch {
-                print(error.localizedDescription) // tem que ajeitar isso depois porque ta aparecendo pro user
+                print(error.localizedDescription)
             }
         }
         return arrayType
@@ -72,11 +73,14 @@ public final class Service<Type: Codable & Incrementable> {
             do { // read & append
                 arrayObject = read(filePath: filePath)
                 arrayObject.append(object)
+                arrayObject.sort() { $0.id < $1.id }
                 write(filePath: filePath)
+ 
             }
         } else { // if dont exist will create a new directory
             createDirectory(folderPath: folderPath, filePath: filePath)
             arrayObject.append(object)
+            arrayObject.sort() { $0.id < $1.id }
             write(filePath: filePath)
         }
     }
@@ -97,12 +101,18 @@ public final class Service<Type: Codable & Incrementable> {
         if fileManager.fileExists(atPath: filePath) {
             var array = read(filePath: filePath)
             if !array.isEmpty{
+                if array.count>1{
                 let length = array.count - 1
                 for i in 0...length{
                     if array[i].id == id{
                         array.remove(at: i)
                         write(array: array, filePath: filePath)
+                        break
                     }
+                }
+                } else {
+                    array.remove(at: 0)
+                    write(array: array, filePath: filePath)
                 }
             }
             

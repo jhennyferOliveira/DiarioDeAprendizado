@@ -19,7 +19,7 @@ enum edit{
 }
 protocol DiaryOptionsDelegate: class {
     func addAnotation()
-    func search(parameter: String, search: DiarySearchBy)
+    func search(parameter: String, search: DiarySearchBy)-> Bool
     func deleteAnotation(noteId: Int)
     func editAnotation(anotation: Anotation, edit: edit, newValue : String)
     func showAnotations()
@@ -34,7 +34,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
     let service = Service<Anotation>()
     
-    func search(parameter: String, search: DiarySearchBy) {
+    func search(parameter: String, search: DiarySearchBy) -> Bool{
         let diarios = service.read(filePath: completePathDiary)
         let anotations : [Anotation]
         switch search {
@@ -71,8 +71,10 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 RESULTADO DA PESQUISA:
                 \(filterNotes)\n
                 """)
+            return true
         } else {
-            print("nenhum resultado para: \(parameter)")
+            print("Nenhum resultado para: \(parameter)")
+            return false
         }
     }
     
@@ -119,6 +121,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             disciplina.id = serviceDisciplina.autoIncrement(path: completePathSubject)
             serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
             diario.disciplina = disciplina
+            print("Disciplina \(disciplina.nome) criada")
         }
         service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
         print("Diario foi criado")
@@ -160,7 +163,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                     
                     """)
             } else {
-                print("você não tem nenhuma anotação, crie uma agora :D")
+                print("Você não tem nenhuma anotação, crie uma agora :D")
             }
         }
         

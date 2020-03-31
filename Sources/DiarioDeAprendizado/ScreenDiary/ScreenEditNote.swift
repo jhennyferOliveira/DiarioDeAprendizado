@@ -16,10 +16,10 @@ class ScreenEditNote{
 
         EDITAR:
 
-        1 - título
-        2 - texto
-        3 - nome da disciplina
-        4 - categoria
+        1 - Título
+        2 - Texto
+        3 - Nome da disciplina
+        4 - Categoria
 
         """)
     }
@@ -47,7 +47,7 @@ class ScreenEditNote{
          case "4":
              delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
          default:
-             print("opcao invalida")
+             print("Opção inválida")
          }
      }
 

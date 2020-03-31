@@ -46,11 +46,11 @@ public class ScreenMyDiary {
 
         MENU DIARIO:
 
-        1 - mostrar todas as anotações
-        2 - pesquisar por (nome, data, categoria)
-        3 - adicionar anotação
-        4 - editar anotação
-        5 - apagar anotação
+        1 - Mostrar todas as anotações
+        2 - Pesquisar por (nome, data, categoria)
+        3 - Adicionar anotação
+        4 - Editar anotação
+        5 - Apagar anotação
 
         0 - voltar
         """)

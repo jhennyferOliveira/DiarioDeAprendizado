@@ -16,9 +16,9 @@ class ScreenEditSubject{
 
         EDITAR:
 
-        1 - nome disciplina
-        2 - nota 1
-        3 - nota 2
+        1 - Nome disciplina
+        2 - Nota 1
+        3 - Nota 2
 
         """)
     }
@@ -43,7 +43,7 @@ class ScreenEditSubject{
          case "3":
             delegate?.edit(subject: subject, edit: .grade2, newValue: newValue)
          default:
-             print("opcao invalida")
+             print("Opção inválida")
          }
      }
 
