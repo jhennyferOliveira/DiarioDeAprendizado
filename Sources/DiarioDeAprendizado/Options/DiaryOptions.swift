@@ -20,7 +20,7 @@ enum edit{
 protocol DiaryOptionsDelegate: class {
     func addAnotation()
     func search(parameter: String, search: DiarySearchBy)
-    func deleteAnotation(title: String?, index: Int?)
+    func deleteAnotation(noteId: Int)
     func editAnotation(anotation: Anotation, edit: edit, newValue : String)
     func showAnotations()
     func selectAnotationById() -> Anotation?
@@ -124,47 +124,10 @@ public class DiaryOptions: DiaryOptionsDelegate {
         print("Diario foi criado")
     }
     
-    func deleteAnotation(title: String? = nil, index: Int? = nil) {
-        var diary = service.read(filePath: completePathDiary)
-        
-        // caso o usuario digite um titulo
-        //        if let _ = title {
-        //            let newDiary = diary.filter { anotation -> Bool in
-        //                if anotation.titulo == title {
-        //                    return true
-        //                }
-        //                return false
-        //            }
-        //            service.write(array: newDiary, filePath: completePathDiary)
-        //            print("anotacao deletada!")
-        //        }
-        //
-        if let _ = title {
-            diary.enumerated().forEach { foundIndex, anotation in
-                if anotation.titulo == title {
-                    var anotationEdited = anotation
-                    anotationEdited.titulo = "EDITED \(anotation.titulo)"
-                    diary.remove(at: foundIndex)
-                    service.write(array: diary, filePath: completePathDiary)
-                    print("for removido")
-                } else {
-                    print("este titulo não existe, digite outro:")
-                }
-            }
-        }
-        
-        // caso o usuario digite um indice
-        if let index = index {
-            if diary.indices.contains(index) { // if is on range
-                diary.remove(at: index)
-                service.write(array: diary, filePath: completePathDiary)
-            } else {
-                print("não existe nada dentro desse range")
-            }
-        }
-        
+    func deleteAnotation(noteId: Int) {
+        service.deleteById(filePath: completePathDiary, id: noteId)
     }
-
+    
     func editAnotation(anotation: Anotation, edit: edit, newValue: String) {
         var newAnotation = Anotation()
         newAnotation = anotation
