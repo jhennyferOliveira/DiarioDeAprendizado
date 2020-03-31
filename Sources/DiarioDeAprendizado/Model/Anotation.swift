@@ -16,7 +16,7 @@ public struct Anotation: Codable, Incrementable {
     var titulo: String = ""
     var texto: String = ""
     var data: String = ""
-    var categoria: String? = ""
+    var categoria: String = ""
     var disciplina: Subject = Subject()
         
 }

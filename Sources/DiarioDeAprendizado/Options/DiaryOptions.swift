@@ -207,6 +207,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 TÍTULO: \(anotation.titulo)
                 DATA: \(anotation.data)
                 DISCIPLINA: \(anotation.disciplina.nome)
+                CATEGORIA: \(anotation.categoria)
                 
                 ANOTAÇÃO: \(anotation.texto)
                 

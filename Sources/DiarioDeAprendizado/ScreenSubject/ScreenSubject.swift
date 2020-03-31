@@ -18,6 +18,7 @@ enum SubjectOptionsEnum {
 
 public class ScreenSubject {
     
+    let service = Service<Subject>()
     weak var delegate: SubjectOptionsDelegate?
     var options = SubjectOptionsEnum.showSubjects
     
@@ -34,8 +35,15 @@ public class ScreenSubject {
         case .deleteSubject:
             delegate?.delete()
         case .editSubject:
-            delegate?.edit()
+            startScreenEditSubject()
         }
+    }
+    
+    func startScreenEditSubject(){
+        let screen = ScreenEditSubject()
+        let options = SubjectOptions()
+        screen.delegate = options
+        screen.main()
     }
     
     func show() {
@@ -65,23 +73,27 @@ public class ScreenSubject {
             switch input {
             case "1":
                 options = .showSubjects
-                clearScreen()
+                service.clearScreen()
                 run()
             case "2":
                 options = .showResuls
-                clearScreen()
+                service.clearScreen()
                 run()
             case "3":
                 options = .calculateAverage
-                clearScreen()
+                service.clearScreen()
                 run()
             case "4":
                 options = .createSubject
-                clearScreen()
+                service.clearScreen()
                 run()
             case "5":
+                options = .deleteSubject
+                service.clearScreen()
+                run()
+            case "6":
                 options = .editSubject
-                clearScreen()
+                service.clearScreen()
                 run()
             default:
                 print("?")
@@ -89,15 +101,7 @@ public class ScreenSubject {
             show()
         }
     }
-    
-    private func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
-    }
-    
+
     private func calculateAvarege() {
         print("digite o id de que deseja tirar a media")
         guard let input = readLine() else {

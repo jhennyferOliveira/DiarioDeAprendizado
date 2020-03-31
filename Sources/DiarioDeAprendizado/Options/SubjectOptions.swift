@@ -11,13 +11,20 @@ enum SubjectSearchBy {
     case name, id
 }
 
+enum Edit{
+    case name
+    case grade1
+    case grade2
+}
+
 protocol SubjectOptionsDelegate: class {
     func create(name: String, n1: String, n2: String, links: String?)
     func search(parameter: String, search: SubjectSearchBy) -> Subject?
     func details()
     func delete()
-    func edit()
+    func edit(subject: Subject, edit: Edit, newValue: String)
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
+    func selectSubjectById() -> Subject?
 }
 
 public class SubjectOptions: SubjectOptionsDelegate {
@@ -45,7 +52,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         }
         
         disciplina.nome = name
-        disciplina.id = autoIncrementSubjectId()
+        disciplina.id = service.autoIncrement(path: completePathSubject)
         
         service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
         print("sua disciplina foi salva no arquivo disciplina.txt")
@@ -89,10 +96,10 @@ public class SubjectOptions: SubjectOptionsDelegate {
         return results[0] // tem q mudar este retorno
     }
     
-    func details() {
+    func details(){
         let grades = service.read(filePath: completePathSubject)
-        let subjects = grades.enumerated().map { (index, subject) in
-            return "\(index) - \(subject.nome)"
+        let subjects = grades.map { subject in
+            return "\(subject.id) - \(subject.nome)"
         }.reduce("") {$0 + "\n" + $1}
         
         if !subjects.isEmpty {
@@ -110,8 +117,43 @@ public class SubjectOptions: SubjectOptionsDelegate {
         
     }
     
-    func edit() {
+    
+    func edit(subject: Subject, edit: Edit, newValue: String) {
+        var newSubject = Subject()
+        newSubject = subject
         
+        switch edit {
+        case .name:
+            newSubject.nome = newValue
+        case .grade1:
+            newSubject.nota1 = newValue
+        case .grade2:
+            newSubject.nota2 = newValue
+        }
+        service.deleteById(filePath: completePathSubject, id: subject.id)
+        service.save(object: newSubject, folderPath: completePathSubject)
+    }
+    
+    
+    func selectSubjectById() -> Subject? {
+        
+        let subjects : [Subject] = service.read(filePath: completePathSubject)
+        if(!subjects.isEmpty){
+            print("Digite o id para selecionar a disciplina: ")
+            if let input = readLine() {
+                if let input = Int(input) {
+                    for subject in subjects{
+                        if (subject.id == input){
+                            return subject
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        return nil
     }
     
     // error propagation
@@ -140,19 +182,6 @@ public class SubjectOptions: SubjectOptionsDelegate {
     
     private func mean(scores: [Double]) -> Double {
         return scores.reduce(0.0, +) / Double(scores.count)
-    }
-    
-    func autoIncrementSubjectId() -> Int {
-        let arraySubject : [Subject] = service.read(filePath: completePathSubject)
-        let lengthArraySubject = arraySubject.count
-        var id = 0
-        if(lengthArraySubject == 0){
-            id = 1
-            return id
-        } else {
-            id = arraySubject[lengthArraySubject-1].id + 1
-            return id
-        }
     }
     
 }

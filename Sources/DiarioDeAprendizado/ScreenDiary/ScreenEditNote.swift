@@ -25,7 +25,6 @@ class ScreenEditNote{
     }
 
     func main() {
-         showSubmenuEdit()
          delegate?.showAnotations()
          guard let anotation = delegate?.selectAnotationById()else{
              return
