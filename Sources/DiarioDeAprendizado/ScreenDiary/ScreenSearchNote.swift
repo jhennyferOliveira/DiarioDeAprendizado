@@ -16,19 +16,21 @@ public class ScreenSearchNote {
         guard let input = readLine() else  {
             return
         }
-        
+        let boolean: Bool
         switch options {
         case .title:
-            delegate?.search(parameter: input, search: .title)
+            boolean = delegate?.search(parameter: input, search: .title) ?? false
         case .date:
-            delegate?.search(parameter: input, search: .date)
+            boolean = delegate?.search(parameter: input, search: .date) ?? false
         case .category:
-            delegate?.search(parameter: input, search: .category)
+            boolean = delegate?.search(parameter: input, search: .category) ?? false
         }
-        guard let anotation = delegate?.selectAnotationById() else{
-            return
+        if boolean{
+            guard let anotation = delegate?.selectAnotationById() else{
+                return
+            }
+            delegate?.showFormattedAnotation(anotation: anotation)
         }
-        delegate?.showFormattedAnotation(anotation: anotation)
     }
     
     func show() {
