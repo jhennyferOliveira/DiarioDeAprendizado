@@ -1,0 +1,20 @@
+[
+  {
+    "senha" : "698dc19d489c4e4db73e28a713eab07b",
+    "id" : 1,
+    "matricula" : "20172045050590",
+    "uuid" : "generate uiid",
+    "username" : "",
+    "nome" : "vinicius mesquta",
+    "disciplinas" : [
+      {
+        "nota1" : "",
+        "id" : 2,
+        "links" : "",
+        "nome" : "",
+        "nota2" : "|",
+        "frequencia" : ""
+      }
+    ]
+  }
+]

@@ -8,9 +8,24 @@
 
 import Foundation
 
-public struct User: Codable {
+public class User: Codable, Incrementable {
+    public var id: Int
+    var uuid: String
+    var username: String
     var nome: String
     var matricula: String
     var senha: String
     var disciplinas: [Subject]
+    
+    
+    public init(username: String,
+        nome: String, matricula: String, senha: String) {
+        id = 1
+        self.uuid = "generate uiid"
+        self.username = username
+        self.nome = nome
+        self.matricula = matricula
+        self.senha = senha
+        self.disciplinas = [Subject(id: 2, nome: "", nota1: "", nota2: "|", frequencia: "", links: "")]
+    }
 }
