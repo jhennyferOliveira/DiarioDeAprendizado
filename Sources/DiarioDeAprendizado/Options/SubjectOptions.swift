@@ -25,6 +25,7 @@ protocol SubjectOptionsDelegate: class {
     func edit(subject: Subject, edit: Edit, newValue: String)
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
     func selectSubjectById() -> Subject?
+    func showFormattedSubject(subject: Subject)
 }
 
 public class SubjectOptions: SubjectOptionsDelegate {
@@ -134,6 +135,15 @@ public class SubjectOptions: SubjectOptionsDelegate {
         service.save(object: newSubject, folderPath: completePathSubject)
     }
     
+    func showFormattedSubject(subject: Subject){
+        print("""
+            
+            NOME: \(subject.nome)
+            NOTA 1: \(subject.nota1 ?? "sem nota cadastrada")
+            NOTA 2: \(subject.nota2 ?? "sem nota cadastrada")
+            
+            """)
+    }
     
     func selectSubjectById() -> Subject? {
         
