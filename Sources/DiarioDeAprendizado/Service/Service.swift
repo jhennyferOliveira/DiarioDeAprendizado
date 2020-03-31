@@ -46,6 +46,7 @@ public final class Service<Type: Codable & Incrementable> {
             print(error.localizedDescription)
         }
     }
+
     
     func autoIncrement(path:String) -> Int{
         let array = read(filePath: path)
@@ -59,8 +60,8 @@ public final class Service<Type: Codable & Incrementable> {
             return id
         }
     }
-    
-    func override(object: Type, folderPath: String, fileName: String? = nil) {
+
+    func save(object: Type, folderPath: String, fileName: String? = nil) {
         encoder.outputFormatting = .prettyPrinted
         var filePath = folderPath
         if let filename = fileName {

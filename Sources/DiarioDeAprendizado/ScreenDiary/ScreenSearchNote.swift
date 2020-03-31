@@ -9,7 +9,7 @@ import Foundation
 
 public class ScreenSearchNote {
     weak var delegate: DiaryOptionsDelegate?
-    var options = searchBy.title
+    var options = DiarySearchBy.title
     
     func run(chosenOption : String) {
         print("Digite \(chosenOption): ")
