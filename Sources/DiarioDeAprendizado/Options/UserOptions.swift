@@ -60,7 +60,7 @@ public class UserOptions: UserOptionsDelegate {
         }
         
         if editedUser.isLogged {
-            service.deleteById(filePath: completePathUser, id: editedUser.id)
+            service.deleteEncrypted(filePath: completePathUser, id: editedUser.id)
             service.saveEcrypted(object: editedUser, folderPath: folderPath, fileName: "user.txt")
         } else {
             print("Por favor, realize o login primeiro!")

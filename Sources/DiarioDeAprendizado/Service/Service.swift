@@ -141,7 +141,7 @@ public final class Service<Type: Codable & Incrementable> {
             let encrypted = try jsonData.encrypt(cipher: aes)
             try encrypted.write(to: URL(fileURLWithPath: filePath))
         } catch {
-            print(error.localizedDescription)
+            // print(error.localizedDescription)
         }
     }
     
@@ -178,7 +178,7 @@ public final class Service<Type: Codable & Incrementable> {
                 arrayType = try decoder.decode([Type].self, from: decrypted)
                 return arrayType
             } catch {
-                print(error.localizedDescription)
+                // print(error.localizedDescription)
             }
         }
         return arrayType
@@ -191,12 +191,12 @@ public final class Service<Type: Codable & Incrementable> {
         
         if fileManager.fileExists(atPath: filePath) {
             var array = read(filePath: filePath, encryptionKey: key, iv: iv)
-            if !array.isEmpty{
+            if !array.isEmpty {
                 let length = array.count - 1
                 for i in 0...length {
                     if array[i].id == id{
                         array.remove(at: i)
-                        write(array: array, filePath: filePath)
+                        write(filePath: filePath, encryptionKey: key, iv: iv)
                     }
                 }
             }
