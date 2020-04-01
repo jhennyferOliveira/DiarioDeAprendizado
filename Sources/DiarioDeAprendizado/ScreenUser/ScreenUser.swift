@@ -89,6 +89,17 @@ public class ScreenUser {
     
     /* criar um menu para esta funcao */
     private func register() {
+        
+        print("digite o seu nome")
+        guard let nome = readLine() else {
+            return
+        }
+        
+        print("digite um username, será usado para o login")
+        guard let username = readLine() else {
+            return
+        }
+        
         print("digite a matricula")
         guard let matricula = readLine() else {
             return
@@ -98,7 +109,7 @@ public class ScreenUser {
             return
         }
         let hash = password.md5() // hashing pssword
-        delegate?.saveInformation(matricula: matricula, password: hash)
+        delegate?.saveInformation(nome: nome, username: username, matricula: matricula, password: hash)
         
     }
     
@@ -117,6 +128,7 @@ public class ScreenUser {
         util.system("clear")
         
         if result == true {
+            CurrentUser.instance.isLogged = true
             print("Sucesso em login!")
         } else {
             print("login erro!")

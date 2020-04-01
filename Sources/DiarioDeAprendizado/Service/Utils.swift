@@ -9,8 +9,6 @@ import Foundation
 
 public final class Utils {
     
-    var currentUser = User()
-    
     func system(_ arg: String) {
         switch arg {
         case "clear":
@@ -18,14 +16,6 @@ public final class Utils {
         default:
             print("system error")
         }
-    }
-    
-    func getCurrentUser() -> User {
-        return currentUser
-    }
-    
-    func setCurrentUser(user: User) {
-        currentUser = user
     }
     
     private func clearTerminal() {

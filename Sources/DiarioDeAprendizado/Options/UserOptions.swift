@@ -10,8 +10,8 @@ import CryptoSwift
 
 protocol UserOptionsDelegate: class {
     func details()
-    func editInformation(user: User, edit: EditUserBy, newValue: String)
-    func saveInformation(matricula: String, password: String)
+    func editInformation(edit: EditUserBy, newValue: String)
+    func saveInformation(nome: String, username: String, matricula: String, password: String)
     func checkInformation(username: String, password: String) -> Bool
 }
 
@@ -31,42 +31,52 @@ public class UserOptions: UserOptionsDelegate {
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
     let service = Service<User>()
-    let utils = Utils()
     
     func details() {
-        let currentUser = utils.getCurrentUser()
+        let currentUser = CurrentUser.instance
         
-        print("""
-            olá \(currentUser.nome)
-            Voce esta logado como \(currentUser.username)
-        """)
+        if currentUser.isLogged {
+            print("""
+                olá \(currentUser.nome)
+                sua Matricula é \(currentUser.matricula)
+                """)
+        } else {
+            print("Por favor, realize o login primeiro!")
+        }
+        
     }
     
-    func editInformation(user: User, edit: EditUserBy, newValue: String) {
+    func editInformation(edit: EditUserBy, newValue: String) {
         /* not implemented yet **/
-        let editedUser = user
+        let editedUser = CurrentUser.instance
+        
         
         switch edit {
         case .name:
             editedUser.nome = newValue
         case .password:
-            editedUser.senha = newValue
+            editedUser.senha = newValue.md5()
         }
-        service.deleteById(filePath: completePathUser, id: user.id)
-        service.save(object: editedUser, folderPath: completePathUser)
+        
+        if editedUser.isLogged {
+            service.deleteById(filePath: completePathUser, id: editedUser.id)
+            service.save(object: editedUser, folderPath: completePathUser)
+        } else {
+            print("Por favor, realize o login primeiro!")
+        }
+        
         
     }
 
     /* faltam ajustes */
-    func saveInformation(matricula: String, password: String) {
+    func saveInformation(nome: String, username: String, matricula: String, password: String) {
         let users = service.read(filePath: completePathUser)
         if users.isEmpty {
-            let user = User(username: "teste", nome: "vinicius mesquta", matricula: matricula, senha: password)
+            let user = User(username: username, nome: nome, matricula: matricula, senha: password)
+            user.id = service.autoIncrement(path: completePathUser)
             service.save(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
-            print("ja existe o registro, deseja cadastrar mais um usuario?")
-            guard let response = readLine() else { return }
-            print(response)
+            
         }
    
     }
@@ -78,11 +88,17 @@ public class UserOptions: UserOptionsDelegate {
         
         users.forEach { user in
             if (user.username == username && user.senha == password) {
-                utils.setCurrentUser(user: user)
+                setCurrentUser(user: user)
                 result = true
             }
         }
         return result
+    }
+    
+    private func setCurrentUser(user: User) {
+        let currentUser = CurrentUser.instance
+        currentUser.nome = user.nome
+        currentUser.matricula = user.matricula
     }
     
 }
