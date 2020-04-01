@@ -8,7 +8,7 @@
 import Foundation
 
 class ScreenEditSubject{
-    
+    let utils = Utils()
     weak var delegate: SubjectOptionsDelegate?
     
     func showSubmenuEdit() {
@@ -25,6 +25,7 @@ class ScreenEditSubject{
         """)
     }
     
+    
     func main() {
         delegate?.details()
         guard let subject = delegate?.selectSubjectById()else{
@@ -35,11 +36,9 @@ class ScreenEditSubject{
             guard input != "0" else {
                 break
             }
-            print("Digite o novo valor:")
             guard let newValue = readLine() else{
                 return
             }
-            
             switch input {
             case "1":
                 delegate?.edit(subject: subject, edit: .name, newValue: newValue)
@@ -50,6 +49,9 @@ class ScreenEditSubject{
             default:
                 print("Opção inválida")
             }
+            print("A disciplina foi alterada")
+            utils.system("clear")
+            showSubmenuEdit()
         }
     }
     

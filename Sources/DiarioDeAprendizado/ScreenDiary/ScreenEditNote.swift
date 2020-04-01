@@ -8,7 +8,7 @@
 import Foundation
 
 class ScreenEditNote{
-
+    let utils = Utils()
     weak var delegate: DiaryOptionsDelegate?
     
     func showSubmenuEdit() {
@@ -53,6 +53,8 @@ class ScreenEditNote{
          default:
              print("Opção inválida")
          }
+            utils.system("clear")
+            showSubmenuEdit()
      }
     }
 
