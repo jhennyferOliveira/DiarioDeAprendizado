@@ -10,5 +10,11 @@
     "id" : 2,
     "nome" : "matematica",
     "nota2" : "-"
+  },
+  {
+    "nota1" : "",
+    "id" : 3,
+    "nome" : "poo",
+    "nota2" : "-"
   }
 ]

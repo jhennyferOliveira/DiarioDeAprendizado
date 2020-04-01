@@ -36,6 +36,7 @@ class ScreenEditSubject{
             guard input != "0" else {
                 break
             }
+            print("Digite o novo valor:")
             guard let newValue = readLine() else{
                 return
             }
@@ -49,8 +50,8 @@ class ScreenEditSubject{
             default:
                 print("Opção inválida")
             }
-            print("A disciplina foi alterada")
             utils.system("clear")
+            print("A disciplina foi alterada")
             showSubmenuEdit()
         }
     }

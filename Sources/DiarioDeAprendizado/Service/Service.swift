@@ -28,7 +28,7 @@ public final class Service<Type: Codable & Incrementable> {
                 arrayType.sort(){$0.id < $1.id}
                 return arrayType
             } catch {
-                print(error.localizedDescription)
+//                print(error.localizedDescription)
             }
         }
         return arrayType
