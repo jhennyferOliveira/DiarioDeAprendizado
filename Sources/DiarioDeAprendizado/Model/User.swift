@@ -10,6 +10,7 @@ import Foundation
 
 public class User: Codable, Incrementable {
     public var id: Int
+    var uuid: String
     var username: String
     var nome: String
     var matricula: String
@@ -20,6 +21,7 @@ public class User: Codable, Incrementable {
     public init(username: String,
         nome: String, matricula: String, senha: String) {
         id = 1
+        self.uuid = "generate uiid"
         self.username = username
         self.nome = nome
         self.matricula = matricula
@@ -29,6 +31,7 @@ public class User: Codable, Incrementable {
     
     public init() {
         id = 1
+        self.uuid = ""
         self.username = ""
         self.nome = ""
         self.matricula = ""

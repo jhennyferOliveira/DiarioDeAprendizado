@@ -19,15 +19,12 @@ class ScreenEditUser {
         1 - Nome de Usuário
         2 - Senha
 
-        0 - voltar
-
         """)
     }
 
     func main() {
         delegate?.details()
         show()
-        
         guard let input = readLine() else { return }
         print("Digite o novo valor:")
         guard let newValue = readLine() else {
@@ -35,9 +32,9 @@ class ScreenEditUser {
         }
         switch input {
         case "1":
-            delegate?.editInformation(edit: .name, newValue: newValue)
+            print("editar")
         case "2":
-            delegate?.editInformation(edit: .password, newValue: newValue)
+            print("editar")
         default:
             print("Opção invalida")
         }

@@ -140,5 +140,4 @@ public final class Service<Type: Codable & Incrementable> {
         clear.launch()
         clear.waitUntilExit()
     }
-    
 }
