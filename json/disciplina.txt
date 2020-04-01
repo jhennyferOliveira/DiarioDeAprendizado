@@ -1,20 +1,2 @@
 [
-  {
-    "nota1" : "5.0",
-    "id" : 1,
-    "nome" : "Matematica",
-    "nota2" : "7.0"
-  },
-  {
-    "nota1" : "10.0",
-    "id" : 2,
-    "nome" : "Historia",
-    "nota2" : "10.0"
-  },
-  {
-    "nota1" : "2.0",
-    "id" : 3,
-    "nome" : "Geografia",
-    "nota2" : "10.0"
-  }
 ]

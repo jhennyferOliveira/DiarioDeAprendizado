@@ -19,6 +19,7 @@ enum AuthenticationError: Error {
     case refusedLogin
     case ecryptError
     case decryptError
+    case usernameError
 }
 
 enum EditUserBy {
@@ -59,31 +60,29 @@ public class UserOptions: UserOptionsDelegate {
         }
         
         if editedUser.isLogged {
-            service.deleteById(filePath: completePathUser, id: editedUser.id)
-            service.save(object: editedUser, folderPath: completePathUser)
+            service.deleteEncrypted(filePath: completePathUser, id: editedUser.id)
+            service.saveEcrypted(object: editedUser, folderPath: folderPath, fileName: "user.txt")
         } else {
             print("Por favor, realize o login primeiro!")
         }
         
-        
     }
-
+    
     /* faltam ajustes */
     func saveInformation(nome: String, username: String, matricula: String, password: String) {
-        let users = service.read(filePath: completePathUser)
-        if users.isEmpty {
+        
+        if usernameIsAvailable(username) {
             let user = User(username: username, nome: nome, matricula: matricula, senha: password)
             user.id = service.autoIncrement(path: completePathUser)
-            service.save(object: user, folderPath: folderPath, fileName: "user.txt")
+            service.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
-            
+            print("Erro: Username indisponivel")
         }
-   
     }
     
     /* em testes */
     func checkInformation(username: String, password: String) -> Bool {
-        let users = service.read(filePath: completePathUser)
+        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
         var result = false
         
         users.forEach { user in
@@ -101,5 +100,15 @@ public class UserOptions: UserOptionsDelegate {
         currentUser.matricula = user.matricula
     }
     
+    private func usernameIsAvailable(_ username: String) -> Bool {
+        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
+        var result = true
+        users.forEach {  user in
+            if user.username == username {
+                result = false
+            }
+        }
+        return result
+    }
 }
 

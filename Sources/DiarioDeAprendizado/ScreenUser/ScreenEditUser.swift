@@ -28,19 +28,27 @@ class ScreenEditUser {
         delegate?.details()
         show()
         
-        guard let input = readLine() else { return }
-        print("Digite o novo valor:")
-        guard let newValue = readLine() else {
-            return
+        while let input = readLine() {
+            
+            guard input != "0" else {
+                break
+            }
+            
+            print("Digite o novo valor:")
+            guard let newValue = readLine() else {
+                return
+            }
+            
+            switch input {
+            case "1":
+                delegate?.editInformation(edit: .name, newValue: newValue)
+            case "2":
+                delegate?.editInformation(edit: .password, newValue: newValue)
+            default:
+                print("Opção invalida")
+            }
         }
-        switch input {
-        case "1":
-            delegate?.editInformation(edit: .name, newValue: newValue)
-        case "2":
-            delegate?.editInformation(edit: .password, newValue: newValue)
-        default:
-            print("Opção invalida")
-        }
+        
     }
     
 }
