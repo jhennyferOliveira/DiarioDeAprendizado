@@ -19,6 +19,7 @@ enum AuthenticationError: Error {
     case refusedLogin
     case ecryptError
     case decryptError
+    case usernameError
 }
 
 enum EditUserBy {
@@ -29,7 +30,7 @@ enum EditUserBy {
 public class UserOptions: UserOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
-    let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
+    let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.json"
     let service = Service<User>()
     
     func details() {
@@ -65,20 +66,18 @@ public class UserOptions: UserOptionsDelegate {
             print("Por favor, realize o login primeiro!")
         }
         
-        
     }
-
+    
     /* faltam ajustes */
     func saveInformation(nome: String, username: String, matricula: String, password: String) {
-        let users = service.read(filePath: completePathUser)
-        if users.isEmpty {
+        
+        if usernameIsAvailable(username) {
             let user = User(username: username, nome: nome, matricula: matricula, senha: password)
             user.id = service.autoIncrement(path: completePathUser)
-            service.save(object: user, folderPath: folderPath, fileName: "user.txt")
+            service.save(object: user, folderPath: folderPath, fileName: "user.json")
         } else {
-            
+            print("Erro: Username indisponivel")
         }
-   
     }
     
     /* em testes */
@@ -101,5 +100,15 @@ public class UserOptions: UserOptionsDelegate {
         currentUser.matricula = user.matricula
     }
     
+    private func usernameIsAvailable(_ username: String) -> Bool {
+        let users = service.read(filePath: completePathUser)
+        var result = true
+        users.forEach {  user in
+            if user.username == username {
+                result = false
+            }
+        }
+        return result
+    }
 }
 

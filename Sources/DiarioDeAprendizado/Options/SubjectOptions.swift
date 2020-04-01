@@ -30,7 +30,7 @@ protocol SubjectOptionsDelegate: class {
 public class SubjectOptions: SubjectOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
-    let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
+    let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
     let service = Service<Subject>()
     
     func create(name: String, n1: String, n2: String, links: String?) {

@@ -30,8 +30,8 @@ protocol DiaryOptionsDelegate: class {
 public class DiaryOptions: DiaryOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
-    let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.txt"
-    let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+    let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
+    let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
     let service = Service<Anotation>()
     
     func search(parameter: String, search: DiarySearchBy) {
@@ -117,7 +117,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             disciplina.nome = nomeDisciplina
 
             disciplina.id = serviceDisciplina.autoIncrement(path: completePathSubject)
-            serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+            serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.json")
             diario.disciplina = disciplina
         }
         service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
@@ -215,7 +215,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
         }
         
         func selectAnotationById() -> Anotation?{
-            let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.txt"
+            let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
             let service = Service<Anotation>()
             let anotations : [Anotation] = service.read(filePath: completePathDiary)
             

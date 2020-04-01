@@ -1,12 +1,2 @@
 [
-  {
-    "username" : "",
-    "id" : 1,
-    "matricula" : "12321321",
-    "nome" : "junin",
-    "senha" : "",
-    "disciplinas" : [
-
-    ]
-  }
 ]
