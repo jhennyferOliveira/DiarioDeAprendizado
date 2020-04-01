@@ -10,7 +10,7 @@ import CryptoSwift
 
 protocol UserOptionsDelegate: class {
     func details()
-    func editInformation(user: User, edit: EditUserBy, newValue: String)
+    func editInformation(edit: EditUserBy, newValue: String)
     func saveInformation(nome: String, username: String, matricula: String, password: String)
     func checkInformation(username: String, password: String) -> Bool
 }
@@ -35,20 +35,21 @@ public class UserOptions: UserOptionsDelegate {
     func details() {
         let currentUser = CurrentUser.instance
         
-        if !(currentUser.nome != "") {
+        if currentUser.isLogged {
             print("""
                 olá \(currentUser.nome)
                 sua Matricula é \(currentUser.matricula)
-            """)
+                """)
         } else {
             print("Por favor, realize o login primeiro!")
         }
         
     }
     
-    func editInformation(user: User, edit: EditUserBy, newValue: String) {
+    func editInformation(edit: EditUserBy, newValue: String) {
         /* not implemented yet **/
-        let editedUser = user
+        let editedUser = CurrentUser.instance
+        
         
         switch edit {
         case .name:
@@ -56,8 +57,14 @@ public class UserOptions: UserOptionsDelegate {
         case .password:
             editedUser.senha = newValue.md5()
         }
-        service.deleteById(filePath: completePathUser, id: user.id)
-        service.save(object: editedUser, folderPath: completePathUser)
+        
+        if editedUser.isLogged {
+            service.deleteById(filePath: completePathUser, id: editedUser.id)
+            service.save(object: editedUser, folderPath: completePathUser)
+        } else {
+            print("Por favor, realize o login primeiro!")
+        }
+        
         
     }
 
@@ -66,11 +73,10 @@ public class UserOptions: UserOptionsDelegate {
         let users = service.read(filePath: completePathUser)
         if users.isEmpty {
             let user = User(username: username, nome: nome, matricula: matricula, senha: password)
+            user.id = service.autoIncrement(path: completePathUser)
             service.save(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
-            print("ja existe o registro, deseja cadastrar mais um usuario?")
-            guard let response = readLine() else { return }
-            print(response)
+            
         }
    
     }

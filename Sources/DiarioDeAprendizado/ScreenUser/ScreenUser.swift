@@ -128,6 +128,7 @@ public class ScreenUser {
         util.system("clear")
         
         if result == true {
+            CurrentUser.instance.isLogged = true
             print("Sucesso em login!")
         } else {
             print("login erro!")

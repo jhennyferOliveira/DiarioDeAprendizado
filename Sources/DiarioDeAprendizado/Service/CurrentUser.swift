@@ -10,7 +10,7 @@ import Foundation
 public final class CurrentUser: User {
     
     static var instance = CurrentUser()
-    
+    var isLogged = false
     override private init() {
         super.init()
     }
