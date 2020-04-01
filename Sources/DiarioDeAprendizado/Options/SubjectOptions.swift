@@ -55,7 +55,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         disciplina.nome = name
         disciplina.id = service.autoIncrement(path: completePathSubject)
         
-        service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.txt")
+        service.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.json")
         print("A disciplina foi salva no arquivo disciplina.txt")
     }
     

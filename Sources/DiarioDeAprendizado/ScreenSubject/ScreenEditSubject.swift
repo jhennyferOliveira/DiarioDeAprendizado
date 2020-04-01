@@ -8,7 +8,7 @@
 import Foundation
 
 class ScreenEditSubject{
-
+    
     weak var delegate: SubjectOptionsDelegate?
     
     func showSubmenuEdit() {
@@ -20,42 +20,48 @@ class ScreenEditSubject{
         2 - Nota 1
         3 - Nota 2
 
+        0 - Voltar
+
         """)
     }
-
+    
     func main() {
         delegate?.details()
         guard let subject = delegate?.selectSubjectById()else{
-             return
-         }
+            return
+        }
         showSubmenuEdit()
-         guard let input = readLine() else{ return
-         }
-         print("Digite o novo valor:")
-         guard let newValue = readLine() else{
-             return
-         }
-         switch input {
-         case "1":
-            delegate?.edit(subject: subject, edit: .name, newValue: newValue)
-         case "2":
-            delegate?.edit(subject: subject, edit: .grade1, newValue: newValue)
-         case "3":
-            delegate?.edit(subject: subject, edit: .grade2, newValue: newValue)
-         default:
-             print("Opção inválida")
-         }
-     }
-
+        while let input = readLine() {
+            guard input != "0" else {
+                break
+            }
+            print("Digite o novo valor:")
+            guard let newValue = readLine() else{
+                return
+            }
+            
+            switch input {
+            case "1":
+                delegate?.edit(subject: subject, edit: .name, newValue: newValue)
+            case "2":
+                delegate?.edit(subject: subject, edit: .grade1, newValue: newValue)
+            case "3":
+                delegate?.edit(subject: subject, edit: .grade2, newValue: newValue)
+            default:
+                print("Opção inválida")
+            }
+        }
+    }
+    
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
 

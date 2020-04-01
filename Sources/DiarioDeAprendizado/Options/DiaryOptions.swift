@@ -123,7 +123,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             diario.disciplina = disciplina
             print("Disciplina \(disciplina.nome) criada")
         }
-        service.save(object: diario, folderPath: folderPath, fileName: "diario.txt")
+        service.save(object: diario, folderPath: folderPath, fileName: "diario.json")
         print("Diario foi criado")
     }
     

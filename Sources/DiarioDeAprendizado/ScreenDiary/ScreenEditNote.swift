@@ -21,6 +21,8 @@ class ScreenEditNote{
         3 - Nome da disciplina
         4 - Categoria
 
+        0 - Voltar
+
         """)
     }
 
@@ -31,9 +33,11 @@ class ScreenEditNote{
          }
          showSubmenuEdit()
          
-         guard let input = readLine() else{ return
-         }
+        while let input = readLine() {
          print("Digite o novo valor:")
+            guard input != "0" else{
+                break
+            }
          guard let newValue = readLine() else{
              return
          }
@@ -50,6 +54,7 @@ class ScreenEditNote{
              print("Opção inválida")
          }
      }
+    }
 
 }
     
