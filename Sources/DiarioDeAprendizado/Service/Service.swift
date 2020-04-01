@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CryptoSwift
 
 public final class Service<Type: Codable & Incrementable> {
     
@@ -130,5 +131,77 @@ public final class Service<Type: Codable & Incrementable> {
         clear.launch()
         clear.waitUntilExit()
     }
+    
+    func write(filePath: String, encryptionKey: String, iv: String) {
+        encoder.outputFormatting = .prettyPrinted
+        
+        do { // write
+            let jsonData = try encoder.encode(arrayObject)
+            let aes = try AES(key: encryptionKey, iv: iv)
+            let encrypted = try jsonData.encrypt(cipher: aes)
+            try encrypted.write(to: URL(fileURLWithPath: filePath))
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func saveEcrypted(object: Type, folderPath: String, fileName: String? = nil) {
+        var filePath = folderPath
+        let key = "keykeykeykeykeyk"
+        let iv = "drowssapdrowssap"
+        if let filename = fileName {
+            filePath = folderPath + "/\(filename)"
+        }
+        
+        if fileManager.fileExists(atPath: filePath) {
+            do { // read & append
+                arrayObject = read(filePath: filePath, encryptionKey: key, iv: iv)
+                arrayObject.append(object)
+                write(filePath: filePath, encryptionKey: key, iv: iv)
+            }
+        } else { // if dont exist will create a new directory
+            createDirectory(folderPath: folderPath, filePath: filePath)
+            arrayObject.append(object)
+            write(filePath: filePath, encryptionKey: key, iv: iv)
+        }
+    }
+    
+    
+    func read(filePath: String, encryptionKey: String, iv: String) -> [Type] {
+        var arrayType = [Type]()
+        
+        
+        if fileManager.fileExists(atPath: filePath) {
+            do {
+                let aes = try AES(key: encryptionKey, iv: iv)
+                let decrypted = try Data(contentsOf: URL(fileURLWithPath: filePath)).decrypt(cipher: aes)
+                arrayType = try decoder.decode([Type].self, from: decrypted)
+                return arrayType
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return arrayType
+    }
+    
+    
+    func deleteEncrypted(filePath: String, id: Int) {
+        let key = "keykeykeykeykeyk"
+        let iv = "drowssapdrowssap"
+        
+        if fileManager.fileExists(atPath: filePath) {
+            var array = read(filePath: filePath, encryptionKey: key, iv: iv)
+            if !array.isEmpty{
+                let length = array.count - 1
+                for i in 0...length {
+                    if array[i].id == id{
+                        array.remove(at: i)
+                        write(array: array, filePath: filePath)
+                    }
+                }
+            }
+        }
+    }
+    
     
 }

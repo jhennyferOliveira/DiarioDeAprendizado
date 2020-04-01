@@ -1,2 +1,12 @@
 [
+  {
+    "username" : "",
+    "id" : 1,
+    "matricula" : "200005",
+    "nome" : "teste",
+    "senha" : "",
+    "disciplinas" : [
+
+    ]
+  }
 ]
