@@ -32,10 +32,10 @@ public class UserOptions: UserOptionsDelegate {
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
     let service = Service<User>()
+    let currentUser = CurrentUser.instance
     
     /* Mostra os detalhes e informações da conta logada */
     func details() {
-        let currentUser = CurrentUser.instance
         
         if currentUser.isLogged {
             print("""
@@ -50,7 +50,12 @@ public class UserOptions: UserOptionsDelegate {
     
     /* Edita as informações do usuario logado no momento */
     func editInformation(edit: EditUserBy, newValue: String) {
-        let editedUser = CurrentUser.instance
+        guard currentUser != nil else {
+            print("what")
+            return
+        }
+    
+        let editedUser = currentUser
         
         switch edit {
         case .name:
@@ -62,10 +67,11 @@ public class UserOptions: UserOptionsDelegate {
         if editedUser.isLogged {
             service.deleteEncrypted(filePath: completePathUser, id: editedUser.id)
             service.saveEcrypted(object: editedUser, folderPath: folderPath, fileName: "user.txt")
+            print("...")
         } else {
             print("Por favor, realize o login primeiro!")
         }
-        
+        print("finish!")
     }
     
     /* Salva as informações e realiza a criptografia dos dados do usuário */

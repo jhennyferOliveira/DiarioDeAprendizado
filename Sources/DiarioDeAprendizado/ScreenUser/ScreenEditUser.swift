@@ -10,7 +10,7 @@ import Foundation
 class ScreenEditUser {
 
     weak var delegate: UserOptionsDelegate?
-    
+    let utils = Utils()
     func show() {
         print("""
 
@@ -33,22 +33,27 @@ class ScreenEditUser {
             guard input != "0" else {
                 break
             }
-            
-            print("Digite o novo valor:")
-            guard let newValue = readLine() else {
-                return
-            }
-            
+  
             switch input {
             case "1":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
                 delegate?.editInformation(edit: .name, newValue: newValue)
             case "2":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
                 delegate?.editInformation(edit: .password, newValue: newValue)
             default:
                 print("Opção invalida")
             }
+            utils.system("clear")
+            print("usuario alterado")
+            show()
         }
         
     }
+    
+        
+         
     
 }
