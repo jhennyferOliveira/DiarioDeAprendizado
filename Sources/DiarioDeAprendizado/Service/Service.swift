@@ -198,12 +198,11 @@ public final class Service<Type: Codable & Incrementable> {
     func deleteEncrypted(filePath: String, id: Int) {
         
         if fileManager.fileExists(atPath: filePath) {
-            var array = readEncrypted(filePath: filePath)
-            if !array.isEmpty {
-                let length = array.count - 1
-                for i in 0...length {
-                    if array[i].id == id {
-                        array.remove(at: i)
+            let element = readEncrypted(filePath: filePath)
+            if !arrayObject.isEmpty {
+                arrayObject.enumerated().forEach { index, element in
+                    if element.id == id {
+                        arrayObject.remove(at: index)
                         writeEncrypted(filePath: filePath)
                     }
                 }

@@ -2,13 +2,39 @@
   {
     "id" : 1,
     "titulo" : "probabilidade",
-    "texto" : "aldkflksmdg;asasdg",
+    "texto" : "Este e o novo texto",
     "data" : "01-04-2020",
     "categoria" : "faculdade",
     "disciplina" : {
       "nota1" : "-",
       "id" : 2,
       "nome" : "matematica",
+      "nota2" : "-"
+    }
+  },
+  {
+    "id" : 2,
+    "titulo" : "Estudar math",
+    "texto" : "hoje eu estudei varias coisas de matematica e pa",
+    "data" : "02-04-2020",
+    "categoria" : "Faculdade",
+    "disciplina" : {
+      "nota1" : "-",
+      "id" : 4,
+      "nome" : "Matematica",
+      "nota2" : "-"
+    }
+  },
+  {
+    "id" : 3,
+    "titulo" : "probabilidade",
+    "texto" : "hoje eu estudei matematica",
+    "data" : "02-04-2020",
+    "categoria" : "Faculdade",
+    "disciplina" : {
+      "nota1" : "-",
+      "id" : 4,
+      "nome" : "Matematica",
       "nota2" : "-"
     }
   }

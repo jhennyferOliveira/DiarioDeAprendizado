@@ -50,11 +50,6 @@ public class UserOptions: UserOptionsDelegate {
     
     /* Edita as informações do usuario logado no momento */
     func editInformation(edit: EditUserBy, newValue: String) {
-        guard currentUser != nil else {
-            print("what")
-            return
-        }
-    
         let editedUser = currentUser
         
         switch edit {

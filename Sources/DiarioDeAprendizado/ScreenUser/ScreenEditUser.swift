@@ -49,6 +49,7 @@ class ScreenEditUser {
             utils.system("clear")
             print("usuario alterado")
             show()
+            break
         }
         
     }
