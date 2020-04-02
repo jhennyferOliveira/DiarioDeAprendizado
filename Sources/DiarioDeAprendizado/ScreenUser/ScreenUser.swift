@@ -75,11 +75,11 @@ public class ScreenUser {
             default:
                 print("?")
         }
-        // util.system("clear")
         show()
         }
     }
     
+    /* inicializa uma chamada para edição de dados do usuário */
     private func startEditUser() {
         let screen = ScreenEditUser()
         let options = UserOptions()
@@ -87,7 +87,7 @@ public class ScreenUser {
         screen.main()
     }
     
-    /* criar um menu para esta funcao */
+    /* Realiza o registro de um novo usuário */
     private func register() {
         
         print("digite o seu nome")
@@ -108,12 +108,12 @@ public class ScreenUser {
         guard let password = readLine() else {
             return
         }
-        let hash = password.md5() // hashing pssword
+        let hash = password.md5()
         delegate?.saveInformation(nome: nome, username: username, matricula: matricula, password: hash)
         
     }
     
-    /* criar um menu para esta funcao */
+    /* Solicita username e senha para realizar a autenticação */
     private func login() {
         print("digite o username")
         guard let username = readLine() else {
@@ -123,7 +123,8 @@ public class ScreenUser {
         guard let password = readLine() else {
             return
         }
-        let hash = password.md5() // hashing password
+        // gera um codigo hash para salvar a senha
+        let hash = password.md5()
         let result = delegate?.checkInformation(username: username, password: hash)
         util.system("clear")
         

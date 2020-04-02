@@ -14,7 +14,8 @@ public final class Service<Type: Codable & Incrementable> {
     let fileManager = FileManager.default
     let decoder = JSONDecoder()
     let encoder = JSONEncoder()
-    
+    let key = "keykeykeykeykeyk"
+    let iv = "drowssapdrowssap"
     var arrayObject = [Type]()
     
     func read(filePath: String) -> [Type] {
@@ -28,7 +29,7 @@ public final class Service<Type: Codable & Incrementable> {
                 arrayType.sort(){$0.id < $1.id}
                 return arrayType
             } catch {
-//                print(error.localizedDescription)
+                print(error.localizedDescription)
             }
         }
         return arrayType
@@ -50,15 +51,15 @@ public final class Service<Type: Codable & Incrementable> {
     }
 
     
-    func autoIncrement(path:String) -> Int{
+    func autoIncrement(path: String) -> Int {
         let array = read(filePath: path)
         let lengthArray = array.count
         var id = 0
-        if(lengthArray == 0){
+        if(lengthArray == 0) {
             id = 1
             return id
         } else {
-            id = array[lengthArray-1].id + 1
+            id = array[lengthArray - 1].id + 1
             return id
         }
     }
@@ -105,7 +106,7 @@ public final class Service<Type: Codable & Incrementable> {
                 if array.count>1{
                 let length = array.count - 1
                 for i in 0...length{
-                    if array[i].id == id{
+                    if array[i].id == id {
                         array.remove(at: i)
                         write(array: array, filePath: filePath)
                         break
@@ -142,12 +143,12 @@ public final class Service<Type: Codable & Incrementable> {
         clear.waitUntilExit()
     }
     
-    func write(filePath: String, encryptionKey: String, iv: String) {
+    func writeEncrypted(filePath: String) {
         encoder.outputFormatting = .prettyPrinted
         
         do { // write
             let jsonData = try encoder.encode(arrayObject)
-            let aes = try AES(key: encryptionKey, iv: iv)
+            let aes = try AES(key: key, iv: iv)
             let encrypted = try jsonData.encrypt(cipher: aes)
             try encrypted.write(to: URL(fileURLWithPath: filePath))
         } catch {
@@ -157,33 +158,32 @@ public final class Service<Type: Codable & Incrementable> {
     
     func saveEcrypted(object: Type, folderPath: String, fileName: String? = nil) {
         var filePath = folderPath
-        let key = "keykeykeykeykeyk"
-        let iv = "drowssapdrowssap"
+        
         if let filename = fileName {
             filePath = folderPath + "/\(filename)"
         }
         
         if fileManager.fileExists(atPath: filePath) {
             do { // read & append
-                arrayObject = read(filePath: filePath, encryptionKey: key, iv: iv)
+                arrayObject = readEncrypted(filePath: filePath)
                 arrayObject.append(object)
-                write(filePath: filePath, encryptionKey: key, iv: iv)
+                writeEncrypted(filePath: filePath)
             }
         } else { // if dont exist will create a new directory
             createDirectory(folderPath: folderPath, filePath: filePath)
             arrayObject.append(object)
-            write(filePath: filePath, encryptionKey: key, iv: iv)
+            writeEncrypted(filePath: filePath)
         }
     }
     
     
-    func read(filePath: String, encryptionKey: String, iv: String) -> [Type] {
+    func readEncrypted(filePath: String) -> [Type] {
         var arrayType = [Type]()
         
         
         if fileManager.fileExists(atPath: filePath) {
             do {
-                let aes = try AES(key: encryptionKey, iv: iv)
+                let aes = try AES(key: key, iv: iv)
                 let decrypted = try Data(contentsOf: URL(fileURLWithPath: filePath)).decrypt(cipher: aes)
                 arrayType = try decoder.decode([Type].self, from: decrypted)
                 return arrayType
@@ -196,17 +196,15 @@ public final class Service<Type: Codable & Incrementable> {
     
     
     func deleteEncrypted(filePath: String, id: Int) {
-        let key = "keykeykeykeykeyk"
-        let iv = "drowssapdrowssap"
         
         if fileManager.fileExists(atPath: filePath) {
-            var array = read(filePath: filePath, encryptionKey: key, iv: iv)
+            var array = readEncrypted(filePath: filePath)
             if !array.isEmpty {
                 let length = array.count - 1
                 for i in 0...length {
-                    if array[i].id == id{
+                    if array[i].id == id {
                         array.remove(at: i)
-                        write(filePath: filePath, encryptionKey: key, iv: iv)
+                        writeEncrypted(filePath: filePath)
                     }
                 }
             }

@@ -28,7 +28,7 @@ public class ScreenSubject {
             delegate?.details()
         case .showResuls:
             delegate?.details()
-            guard let subject = delegate?.selectSubjectById() else{
+            guard let subject = delegate?.selectSubjectById() else {
                 return
             }
             delegate?.showFormattedSubject(subject: subject)
@@ -43,7 +43,7 @@ public class ScreenSubject {
         }
     }
     
-    func startScreenEditSubject(){
+    func startScreenEditSubject() {
         let screen = ScreenEditSubject()
         let options = SubjectOptions()
         screen.delegate = options

@@ -167,7 +167,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
             }
         }
         
-        func showFormattedAnotation(anotation: Anotation){
+        func showFormattedAnotation(anotation: Anotation) {
             print("""
                 
                 TÍTULO: \(anotation.titulo)
@@ -180,7 +180,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 """)
         }
         
-        func selectAnotationById() -> Anotation?{
+        func selectAnotationById() -> Anotation? {
             let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
             let service = Service<Anotation>()
             let anotations : [Anotation] = service.read(filePath: completePathDiary)

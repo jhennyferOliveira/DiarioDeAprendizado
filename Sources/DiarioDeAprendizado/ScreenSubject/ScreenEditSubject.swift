@@ -28,7 +28,7 @@ class ScreenEditSubject{
     
     func main() {
         delegate?.details()
-        guard let subject = delegate?.selectSubjectById()else{
+        guard let subject = delegate?.selectSubjectById() else {
             return
         }
         showSubmenuEdit()
@@ -37,7 +37,7 @@ class ScreenEditSubject{
                 break
             }
             print("Digite o novo valor:")
-            guard let newValue = readLine() else{
+            guard let newValue = readLine() else {
                 return
             }
             switch input {

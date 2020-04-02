@@ -82,7 +82,7 @@ public class UserOptions: UserOptionsDelegate {
     
     /* em testes */
     func checkInformation(username: String, password: String) -> Bool {
-        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
+        let users = service.readEncrypted(filePath: completePathUser)
         var result = false
         
         users.forEach { user in
@@ -101,7 +101,7 @@ public class UserOptions: UserOptionsDelegate {
     }
     
     private func usernameIsAvailable(_ username: String) -> Bool {
-        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
+        let users = service.readEncrypted(filePath: completePathUser)
         var result = true
         users.forEach {  user in
             if user.username == username {

@@ -94,10 +94,10 @@ public class SubjectOptions: SubjectOptionsDelegate {
             print("Não foi encontrado nenhum resultado para: \(parameter)")
             return nil
         }
-        return results[0] // tem q mudar este retorno
+        return results[0]
     }
     
-    func details(){
+    func details() {
         let grades = service.read(filePath: completePathSubject)
         let subjects = grades.map { subject in
             return "\(subject.id) - \(subject.nome)"
@@ -135,7 +135,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         service.save(object: newSubject, folderPath: completePathSubject)
     }
     
-    func showFormattedSubject(subject: Subject){
+    func showFormattedSubject(subject: Subject) {
         print("""
             
             NOME: \(subject.nome)
