@@ -28,16 +28,27 @@ class ScreenEditSubject{
     
     func main() {
         delegate?.details()
-        guard let subject = delegate?.selectSubjectById()else{
+        
+        print("Digite o id para selecionar a disciplina: ")
+        guard let input = readLine() else {
             return
         }
+        guard let id = Int(input) else {
+            print("digite um id válido")
+            return
+        }
+        
         showSubmenuEdit()
         while let input = readLine() {
             guard input != "0" else {
                 break
             }
+            guard let subject = delegate?.selectSubject(id: id) else {
+                return
+            }
+            
             print("Digite o novo valor:")
-            guard let newValue = readLine() else{
+            guard let newValue = readLine() else {
                 return
             }
             switch input {

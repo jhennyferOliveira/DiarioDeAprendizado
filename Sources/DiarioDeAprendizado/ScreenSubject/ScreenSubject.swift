@@ -28,9 +28,7 @@ public class ScreenSubject {
             delegate?.details()
         case .showResuls:
             delegate?.details()
-            guard let subject = delegate?.selectSubjectById() else{
-                return
-            }
+            guard let subject = selectSubjectById() else { return }
             delegate?.showFormattedSubject(subject: subject)
         case .calculateAverage:
             calculateAvarege()
@@ -43,7 +41,7 @@ public class ScreenSubject {
         }
     }
     
-    func startScreenEditSubject(){
+    func startScreenEditSubject() {
         let screen = ScreenEditSubject()
         let options = SubjectOptions()
         screen.delegate = options
@@ -108,7 +106,7 @@ public class ScreenSubject {
     
     private func calculateAvarege() {
         delegate?.details()
-        guard let subject = delegate?.selectSubjectById() else{
+        guard let subject = selectSubjectById() else{
             return
         }
         delegate?.showFormattedSubject(subject: subject)
@@ -165,9 +163,23 @@ public class ScreenSubject {
     
     private func deleteSubject() {
         delegate?.details()
-        guard let subject = delegate?.selectSubjectById() else{
+        guard let subject = selectSubjectById() else {
             return
         }
         delegate?.delete(subjectId: subject.id)
+    }
+    
+    private func selectSubjectById() -> Subject? {
+        guard let input = readLine() else {
+            return nil
+        }
+        guard let id = Int(input) else {
+            print("digite um valor valido")
+            return nil
+        }
+        guard let subject = delegate?.selectSubject(id: id) else {
+            return nil
+        }
+        return subject
     }
 }

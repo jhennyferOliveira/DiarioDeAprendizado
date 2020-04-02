@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  UserOptions.swift
 //  
 //
 //  Created by Vinicius Mesquita on 24/03/20.
@@ -33,6 +33,7 @@ public class UserOptions: UserOptionsDelegate {
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
     let service = Service<User>()
     
+    /* Mostra os detalhes e informações da conta logada */
     func details() {
         let currentUser = CurrentUser.instance
         
@@ -47,10 +48,9 @@ public class UserOptions: UserOptionsDelegate {
         
     }
     
+    /* Edita as informações do usuario logado no momento */
     func editInformation(edit: EditUserBy, newValue: String) {
-        /* not implemented yet **/
         let editedUser = CurrentUser.instance
-        
         
         switch edit {
         case .name:
@@ -68,7 +68,7 @@ public class UserOptions: UserOptionsDelegate {
         
     }
     
-    /* faltam ajustes */
+    /* Salva as informações e realiza a criptografia dos dados do usuário */
     func saveInformation(nome: String, username: String, matricula: String, password: String) {
         
         if usernameIsAvailable(username) {
@@ -80,9 +80,9 @@ public class UserOptions: UserOptionsDelegate {
         }
     }
     
-    /* em testes */
+    /* Realiza a verificação dos dados e retorna true caso seja possivel criar uma conta */
     func checkInformation(username: String, password: String) -> Bool {
-        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
+        let users = service.readEncrypted(filePath: completePathUser)
         var result = false
         
         users.forEach { user in
@@ -93,15 +93,32 @@ public class UserOptions: UserOptionsDelegate {
         }
         return result
     }
-    
+    /* Salva os dados no usuario que está logado no momento! */
+    func saveProgress(subjects: [Subject], anotations: [Anotation], user: CurrentUser) {
+        let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
+        let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
+        let arraySubject = Service<Subject>().read(filePath: completePathSubject)
+        let arrayAnotations = Service<Anotation>().read(filePath: completePathDiary)
+        
+        user.disciplinas = arraySubject
+        user.diario = arrayAnotations
+        service.deleteEncrypted(filePath: completePathUser, id: user.id)
+        service.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
+        
+    }
+    /* Armazena os dados do usuario que está logado no momento */
     private func setCurrentUser(user: User) {
         let currentUser = CurrentUser.instance
         currentUser.nome = user.nome
         currentUser.matricula = user.matricula
+        currentUser.diario = user.diario
+        currentUser.disciplinas = user.disciplinas
+        currentUser.id = user.id
     }
     
+    /* Verifica a disponibilidade de username a partir dos dados atuais */
     private func usernameIsAvailable(_ username: String) -> Bool {
-        let users = service.read(filePath: completePathUser, encryptionKey: "keykeykeykeykeyk",iv: "drowssapdrowssap")
+        let users = service.readEncrypted(filePath: completePathUser)
         var result = true
         users.forEach {  user in
             if user.username == username {

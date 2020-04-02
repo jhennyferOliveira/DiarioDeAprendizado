@@ -24,7 +24,7 @@ protocol SubjectOptionsDelegate: class {
     func delete(subjectId:Int)
     func edit(subject: Subject, edit: Edit, newValue: String)
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
-    func selectSubjectById() -> Subject?
+    func selectSubject(id: Int) -> Subject?
     func showFormattedSubject(subject: Subject)
 }
 
@@ -145,28 +145,19 @@ public class SubjectOptions: SubjectOptionsDelegate {
             """)
     }
     
-    func selectSubjectById() -> Subject? {
-        
+    func selectSubject(id: Int) -> Subject? {
         let subjects : [Subject] = service.read(filePath: completePathSubject)
-        if(!subjects.isEmpty){
-            print("Digite o id para selecionar a disciplina: ")
-            if let input = readLine() {
-                if let input = Int(input) {
-                    for subject in subjects{
-                        if (subject.id == input){
-                            return subject
-                        }
-                    }
-                    
+        if !subjects.isEmpty {
+            for subject in subjects {
+                if (subject.id == id) {
+                    return subject
                 }
-                
             }
-            
         }
         return nil
     }
     
-    // error propagation
+    /* verifica e trata os dados para calcular a média e faz o balanço de pesos */
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double  {
         var scores: [Double] = []
         
@@ -190,6 +181,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         return mean(scores: scores)
     }
     
+    /* função de calculo de média de uma array */
     private func mean(scores: [Double]) -> Double {
         return scores.reduce(0.0, +) / Double(scores.count)
     }
