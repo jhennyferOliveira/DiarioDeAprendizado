@@ -31,7 +31,7 @@ public class UserOptions: UserOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
-    let service = Service<User>()
+    let service = ServiceEncrypter<User>()
     let currentUser = CurrentUser.instance
     
     /* Mostra os detalhes e informações da conta logada */
@@ -98,8 +98,8 @@ public class UserOptions: UserOptionsDelegate {
     func saveProgress(subjects: [Subject], anotations: [Anotation], user: CurrentUser) {
         let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
         let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
-        let arraySubject = Service<Subject>().read(filePath: completePathSubject)
-        let arrayAnotations = Service<Anotation>().read(filePath: completePathDiary)
+        let arraySubject = FileService<Subject>().read(filePath: completePathSubject)
+        let arrayAnotations = FileService<Anotation>().read(filePath: completePathDiary)
         
         user.disciplinas = arraySubject
         user.diario = arrayAnotations

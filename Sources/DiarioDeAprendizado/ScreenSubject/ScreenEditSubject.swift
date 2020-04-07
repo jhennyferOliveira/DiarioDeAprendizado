@@ -14,7 +14,7 @@ class ScreenEditSubject{
     func showSubmenuEdit() {
         print("""
 
-        EDITAR:
+        O que você deseja editar?:
 
         1 - Nome disciplina
         2 - Nota 1
@@ -55,12 +55,13 @@ class ScreenEditSubject{
             case "1":
                 delegate?.edit(subject: subject, edit: .name, newValue: newValue)
             case "2":
-                delegate?.edit(subject: subject, edit: .grade1, newValue: newValue)
+                delegate?.edit(subject: subject, edit: .n1, newValue: newValue)
             case "3":
-                delegate?.edit(subject: subject, edit: .grade2, newValue: newValue)
+                delegate?.edit(subject: subject, edit: .n2, newValue: newValue)
             default:
                 print("Opção inválida")
             }
+            
             utils.system("clear")
             print("A disciplina foi alterada")
             showSubmenuEdit()

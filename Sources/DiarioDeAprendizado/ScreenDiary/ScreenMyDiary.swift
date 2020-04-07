@@ -18,7 +18,7 @@ enum DiaryOptionsEnum {
 }
 
 public class ScreenMyDiary {
-    let service = Service<Anotation>()
+    let service = FileService<Anotation>()
     weak var delegate: DiaryOptionsDelegate?
     var options = DiaryOptionsEnum.search
     

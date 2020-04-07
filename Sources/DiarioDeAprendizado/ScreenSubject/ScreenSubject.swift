@@ -18,7 +18,8 @@ enum SubjectOptionsEnum {
 
 public class ScreenSubject {
     
-    let service = Service<Subject>()
+    let service = FileService<Subject>()
+    let utils = Utils()
     weak var delegate: SubjectOptionsDelegate?
     var options = SubjectOptionsEnum.showSubjects
     
@@ -75,27 +76,27 @@ public class ScreenSubject {
             switch input {
             case "1":
                 options = .showSubjects
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "2":
                 options = .showResuls
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "3":
                 options = .calculateAverage
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "4":
                 options = .createSubject
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "5":
                 options = .deleteSubject
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "6":
                 options = .editSubject
-                service.clearScreen()
+                utils.system("clear")
                 run()
             default:
                 print("?")

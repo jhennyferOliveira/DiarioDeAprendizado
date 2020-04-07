@@ -11,17 +11,15 @@ enum DiarySearchBy {
     case title, date, category
 }
 
-enum edit{
-    case title
-    case note
-    case category
-    case grade
+enum EditNoteBy {
+    case title, note, category, grade
 }
+
 protocol DiaryOptionsDelegate: class {
     func addAnotation()
     func search(parameter: String, search: DiarySearchBy)-> Bool
     func deleteAnotation(noteId: Int)
-    func editAnotation(anotation: Anotation, edit: edit, newValue : String)
+    func editAnotation(anotation: Anotation, edit: EditNoteBy, newValue : String)
     func showAnotations()
     func selectAnotationById() -> Anotation?
     func showFormattedAnotation(anotation: Anotation)
@@ -32,7 +30,7 @@ public class DiaryOptions: DiaryOptionsDelegate {
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
     let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
-    let service = Service<Anotation>()
+    let service = FileService<Anotation>()
     
     func search(parameter: String, search: DiarySearchBy) -> Bool{
         let diarios = service.read(filePath: completePathDiary)
@@ -115,13 +113,13 @@ public class DiaryOptions: DiaryOptionsDelegate {
         if let disciplinaProcurada = subjectOptions.search(parameter: nomeDisciplina, search: .name) {
             diario.disciplina = disciplinaProcurada
         } else {
-            let serviceDisciplina = Service<Subject>()
+            let serviceDisciplina = FileService<Subject>()
             disciplina.nome = nomeDisciplina
 
             disciplina.id = serviceDisciplina.autoIncrement(path: completePathSubject)
             serviceDisciplina.save(object: disciplina, folderPath: folderPath, fileName: "disciplina.json")
             diario.disciplina = disciplina
-            print("Disciplina \(disciplina.nome) criada")
+            
         }
         service.save(object: diario, folderPath: folderPath, fileName: "diario.json")
         print("Diario foi criado")
@@ -131,10 +129,10 @@ public class DiaryOptions: DiaryOptionsDelegate {
         service.deleteById(filePath: completePathDiary, id: noteId)
     }
     
-    func editAnotation(anotation: Anotation, edit: edit, newValue: String) {
+    func editAnotation(anotation: Anotation, edit: EditNoteBy, newValue: String) {
         var newAnotation = Anotation()
         newAnotation = anotation
-        let service = Service<Anotation>()
+        let service = FileService<Anotation>()
         switch edit {
         case .category:
             newAnotation.categoria = newValue
@@ -179,10 +177,11 @@ public class DiaryOptions: DiaryOptionsDelegate {
                 
                 """)
         }
-        
+    
+        /* precisa ser refatorada */
         func selectAnotationById() -> Anotation? {
             let completePathDiary = FileManager.default.currentDirectoryPath + "/json/diario.json"
-            let service = Service<Anotation>()
+            let service = FileService<Anotation>()
             let anotations : [Anotation] = service.read(filePath: completePathDiary)
             
             if(!anotations.isEmpty){

@@ -7,14 +7,15 @@
 
 import Foundation
 
-class ScreenEditNote{
+class ScreenEditNote {
+    
     let utils = Utils()
     weak var delegate: DiaryOptionsDelegate?
     
     func showSubmenuEdit() {
         print("""
 
-        EDITAR:
+        O que você deseja editar?:
 
         1 - Título
         2 - Texto
@@ -27,35 +28,48 @@ class ScreenEditNote{
     }
 
     func main() {
+        
          delegate?.showAnotations()
-         guard let anotation = delegate?.selectAnotationById()else{
-             return
-         }
-         showSubmenuEdit()
-         
+         guard let anotation = delegate?.selectAnotationById() else {
+            return
+        }
+        
+        showSubmenuEdit()
         while let input = readLine() {
-         print("Digite o novo valor:")
-            guard input != "0" else{
+            
+            guard input != "0" else {
                 break
             }
-         guard let newValue = readLine() else{
-             return
-         }
-         switch input {
-         case "1":
-             delegate?.editAnotation(anotation: anotation, edit: .title, newValue: newValue)
-         case "2":
-             delegate?.editAnotation(anotation: anotation, edit: .note, newValue: newValue)
-         case "3":
-             delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
-         case "4":
-             delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
-         default:
-             print("Opção inválida")
-         }
-            utils.system("clear")
+            
+            switch input {
+            case "1":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
+                delegate?.editAnotation(anotation: anotation, edit: .title, newValue: newValue)
+                utils.system("clear")
+            case "2":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
+                delegate?.editAnotation(anotation: anotation, edit: .note, newValue: newValue)
+                utils.system("clear")
+            case "3":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
+                delegate?.editAnotation(anotation: anotation, edit: .grade, newValue: newValue)
+                utils.system("clear")
+            case "4":
+                print("Digite o novo valor:")
+                guard let newValue = readLine() else { return }
+                delegate?.editAnotation(anotation: anotation, edit: .category, newValue: newValue)
+                utils.system("clear")
+            default:
+                utils.system("clear")
+                print("Opção inválida")
+            }
+            
+            print("Sua anotação foi alterada com sucesso!")
             showSubmenuEdit()
-     }
+        }
     }
 
 }

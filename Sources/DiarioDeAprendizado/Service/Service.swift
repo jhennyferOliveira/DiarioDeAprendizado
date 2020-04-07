@@ -9,13 +9,11 @@
 import Foundation
 import CryptoSwift
 
-public final class Service<Type: Codable & Incrementable> {
+public final class FileService<Type: Codable & Incrementable> {
     
     let fileManager = FileManager.default
     let decoder = JSONDecoder()
     let encoder = JSONEncoder()
-    let key = "keykeykeykeykeyk"
-    let iv = "drowssapdrowssap"
     var arrayObject = [Type]()
     
     func read(filePath: String) -> [Type] {
@@ -29,7 +27,7 @@ public final class Service<Type: Codable & Incrementable> {
                 arrayType.sort(){$0.id < $1.id}
                 return arrayType
             } catch {
-//                print(error.localizedDescription)
+                print(error.localizedDescription)
             }
         }
         return arrayType
@@ -46,7 +44,7 @@ public final class Service<Type: Codable & Incrementable> {
                 try jsonString.write(to: URL(fileURLWithPath: filePath), atomically: true, encoding: .utf8)
             }
         } catch {
-//            print(error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
 
@@ -102,10 +100,10 @@ public final class Service<Type: Codable & Incrementable> {
     func deleteById(filePath: String, id: Int) {
         if fileManager.fileExists(atPath: filePath) {
             var array = read(filePath: filePath)
-            if !array.isEmpty{
-                if array.count>1{
+            if !array.isEmpty {
+                if array.count > 1 {
                 let length = array.count - 1
-                for i in 0...length{
+                for i in 0...length {
                     if array[i].id == id {
                         array.remove(at: i)
                         write(array: array, filePath: filePath)
@@ -134,81 +132,5 @@ public final class Service<Type: Codable & Incrementable> {
             print(error.localizedDescription)
         }
     }
-    
-    func clearScreen() {
-        let clear = Process()
-        clear.launchPath = "/usr/bin/clear"
-        clear.arguments = []
-        clear.launch()
-        clear.waitUntilExit()
-    }
-    
-    func writeEncrypted(filePath: String) {
-        encoder.outputFormatting = .prettyPrinted
-        
-        do { // write
-            let jsonData = try encoder.encode(arrayObject)
-            let aes = try AES(key: key, iv: iv)
-            let encrypted = try jsonData.encrypt(cipher: aes)
-            try encrypted.write(to: URL(fileURLWithPath: filePath))
-        } catch {
-            // print(error.localizedDescription)
-        }
-    }
-    
-    func saveEcrypted(object: Type, folderPath: String, fileName: String? = nil) {
-        var filePath = folderPath
-        
-        if let filename = fileName {
-            filePath = folderPath + "/\(filename)"
-        }
-        
-        if fileManager.fileExists(atPath: filePath) {
-            do { // read & append
-                arrayObject = readEncrypted(filePath: filePath)
-                arrayObject.append(object)
-                writeEncrypted(filePath: filePath)
-            }
-        } else { // if dont exist will create a new directory
-            createDirectory(folderPath: folderPath, filePath: filePath)
-            arrayObject.append(object)
-            writeEncrypted(filePath: filePath)
-        }
-    }
-    
-    
-    func readEncrypted(filePath: String) -> [Type] {
-        var arrayType = [Type]()
-        
-        
-        if fileManager.fileExists(atPath: filePath) {
-            do {
-                let aes = try AES(key: key, iv: iv)
-                let decrypted = try Data(contentsOf: URL(fileURLWithPath: filePath)).decrypt(cipher: aes)
-                arrayType = try decoder.decode([Type].self, from: decrypted)
-                return arrayType
-            } catch {
-                // print(error.localizedDescription)
-            }
-        }
-        return arrayType
-    }
-    
-    
-    func deleteEncrypted(filePath: String, id: Int) {
-        
-        if fileManager.fileExists(atPath: filePath) {
-            let element = readEncrypted(filePath: filePath)
-            if !arrayObject.isEmpty {
-                arrayObject.enumerated().forEach { index, element in
-                    if element.id == id {
-                        arrayObject.remove(at: index)
-                        writeEncrypted(filePath: filePath)
-                    }
-                }
-            }
-        }
-    }
-    
     
 }

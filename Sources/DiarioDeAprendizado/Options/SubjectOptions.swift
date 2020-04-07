@@ -11,18 +11,16 @@ enum SubjectSearchBy {
     case name, id
 }
 
-enum Edit{
-    case name
-    case grade1
-    case grade2
+enum EditSubjectBy {
+    case name, n1, n2
 }
 
 protocol SubjectOptionsDelegate: class {
     func create(name: String, n1: String, n2: String, links: String?)
     func search(parameter: String, search: SubjectSearchBy) -> Subject?
     func details()
-    func delete(subjectId:Int)
-    func edit(subject: Subject, edit: Edit, newValue: String)
+    func delete(subjectId: Int)
+    func edit(subject: Subject, edit: EditSubjectBy, newValue: String)
     func average(subject: Subject, weightN1: Int, weightN2: Int) throws -> Double
     func selectSubject(id: Int) -> Subject?
     func showFormattedSubject(subject: Subject)
@@ -32,7 +30,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathSubject = FileManager.default.currentDirectoryPath + "/json/disciplina.json"
-    let service = Service<Subject>()
+    let service = FileService<Subject>()
     
     func create(name: String, n1: String, n2: String, links: String?) {
         var disciplina = Subject()
@@ -97,7 +95,7 @@ public class SubjectOptions: SubjectOptionsDelegate {
         return results[0] // tem q mudar este retorno
     }
     
-    func details(){
+    func details() {
         let grades = service.read(filePath: completePathSubject)
         let subjects = grades.map { subject in
             return "\(subject.id) - \(subject.nome)"
@@ -119,16 +117,16 @@ public class SubjectOptions: SubjectOptionsDelegate {
     }
     
     
-    func edit(subject: Subject, edit: Edit, newValue: String) {
+    func edit(subject: Subject, edit: EditSubjectBy, newValue: String) {
         var newSubject = Subject()
         newSubject = subject
         
         switch edit {
         case .name:
             newSubject.nome = newValue
-        case .grade1:
+        case .n1:
             newSubject.nota1 = newValue
-        case .grade2:
+        case .n2:
             newSubject.nota2 = newValue
         }
         service.deleteById(filePath: completePathSubject, id: subject.id)
@@ -186,11 +184,6 @@ public class SubjectOptions: SubjectOptionsDelegate {
         return scores.reduce(0.0, +) / Double(scores.count)
     }
     
-}
-
-enum AverageError: Error {
-    case insuficientScores
-    case CastingError
 }
 
 extension SubjectOptionsDelegate {

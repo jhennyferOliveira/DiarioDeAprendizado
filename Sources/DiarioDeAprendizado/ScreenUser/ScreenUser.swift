@@ -20,8 +20,9 @@ public class ScreenUser {
     
     weak var delegate: UserOptionsDelegate?
     var options = UserOptionEnum.editInformation
-    let util = Utils()
+    let utils = Utils()
     
+    /* Função responsavel por rodar as opções do menu escolhidas pelo usuário */
     func run() {
         switch options {
         case .showInformation:
@@ -35,6 +36,7 @@ public class ScreenUser {
         }
     }
     
+    /* Responsavel por mostrar o menu na tela do terminal */
     func show() {
         print("""
 
@@ -49,6 +51,7 @@ public class ScreenUser {
         """)
     }
     
+    /* Função utiliziada para inicializar as opoções e o loop de menu na tela */
     func main() {
         show()
         while let input = readLine() {
@@ -59,15 +62,15 @@ public class ScreenUser {
         switch input {
             case "1":
                 options = .showInformation
-                util.system("clear")
+                utils.system("clear")
                 run()
             case "2":
                 options = .editInformation
-                util.system("clear")
+                utils.system("clear")
                 run()
             case "3":
                 options = .saveInformation
-                util.system("clear")
+                utils.system("clear")
                 run()
             case "4":
                 options = .login
@@ -126,7 +129,7 @@ public class ScreenUser {
         // gera um codigo hash para salvar a senha
         let hash = password.md5()
         let result = delegate?.checkInformation(username: username, password: hash)
-        util.system("clear")
+        utils.system("clear")
         
         if result == true {
             CurrentUser.instance.isLogged = true
