@@ -107,7 +107,7 @@ public class ScreenSubject {
     
     private func calculateAvarege() {
         delegate?.details()
-        guard let subject = selectSubjectById() else{
+        guard let subject = selectSubjectById() else {
             return
         }
         delegate?.showFormattedSubject(subject: subject)
@@ -168,6 +168,7 @@ public class ScreenSubject {
             return
         }
         delegate?.delete(subjectId: subject.id)
+        print("disciplina deletada!")
     }
     
     private func selectSubjectById() -> Subject? {
