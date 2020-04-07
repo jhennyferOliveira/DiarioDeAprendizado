@@ -31,7 +31,8 @@ public class UserOptions: UserOptionsDelegate {
     
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
-    let service = ServiceEncrypter<User>()
+    let encrypter = ServiceEncrypter<User>()
+    let service = FileService<User>()
     let currentUser = CurrentUser.instance
     
     /* Mostra os detalhes e informações da conta logada */
@@ -60,8 +61,8 @@ public class UserOptions: UserOptionsDelegate {
         }
         
         if editedUser.isLogged {
-            service.deleteEncrypted(filePath: completePathUser, id: editedUser.id)
-            service.saveEcrypted(object: editedUser, folderPath: folderPath, fileName: "user.txt")
+            encrypter.deleteEncrypted(filePath: completePathUser, id: editedUser.id)
+            encrypter.saveEcrypted(object: editedUser, folderPath: folderPath, fileName: "user.txt")
             print("...")
         } else {
             print("Por favor, realize o login primeiro!")
@@ -75,7 +76,7 @@ public class UserOptions: UserOptionsDelegate {
         if usernameIsAvailable(username) {
             let user = User(username: username, nome: nome, matricula: matricula, senha: password)
             user.id = service.autoIncrement(path: completePathUser)
-            service.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
+            encrypter.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
             print("Erro: Username indisponivel")
         }
@@ -83,7 +84,7 @@ public class UserOptions: UserOptionsDelegate {
     
     /* Realiza a verificação dos dados e retorna true caso seja possivel criar uma conta */
     func checkInformation(username: String, password: String) -> Bool {
-        let users = service.readEncrypted(filePath: completePathUser)
+        let users = encrypter.readEncrypted(filePath: completePathUser)
         var result = false
         
         users.forEach { user in
@@ -103,8 +104,8 @@ public class UserOptions: UserOptionsDelegate {
         
         user.disciplinas = arraySubject
         user.diario = arrayAnotations
-        service.deleteEncrypted(filePath: completePathUser, id: user.id)
-        service.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
+        encrypter.deleteEncrypted(filePath: completePathUser, id: user.id)
+        encrypter.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
         
     }
     /* Armazena os dados do usuario que está logado no momento */
@@ -119,7 +120,7 @@ public class UserOptions: UserOptionsDelegate {
     
     /* Verifica a disponibilidade de username a partir dos dados atuais */
     private func usernameIsAvailable(_ username: String) -> Bool {
-        let users = service.readEncrypted(filePath: completePathUser)
+        let users = encrypter.readEncrypted(filePath: completePathUser)
         var result = true
         users.forEach {  user in
             if user.username == username {

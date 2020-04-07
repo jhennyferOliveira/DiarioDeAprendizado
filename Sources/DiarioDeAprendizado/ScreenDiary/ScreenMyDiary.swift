@@ -19,6 +19,7 @@ enum DiaryOptionsEnum {
 
 public class ScreenMyDiary {
     let service = FileService<Anotation>()
+    let utils = Utils()
     weak var delegate: DiaryOptionsDelegate?
     var options = DiaryOptionsEnum.search
     
@@ -66,23 +67,23 @@ public class ScreenMyDiary {
             switch input {
             case "1":
                 options = .showAnotations
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "2":
                 options = .search
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "3":
                 options = .addAnotation
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "4":
                 options = .editAnotation
-                service.clearScreen()
+                utils.system("clear")
                 run()
             case "5":
                 options = .deleteAnotation
-                service.clearScreen()
+                utils.system("clear")
                 run()
             default:
                 print("?")

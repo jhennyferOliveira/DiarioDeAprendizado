@@ -6,10 +6,9 @@
 //
 
 import Foundation
+import CryptoSwift
 
-typealias Encryptable = Codable & Incrementable
-
-public final class ServiceEncrypter<Type: Encryptable> {
+public final class ServiceEncrypter<Type: Codable & Incrementable> {
     
     let key = "keykeykeykeykeyk"
     let iv = "drowssapdrowssap"

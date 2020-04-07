@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CryptoSwift
 
 public final class FileService<Type: Codable & Incrementable> {
     
