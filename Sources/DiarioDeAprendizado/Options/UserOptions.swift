@@ -25,6 +25,7 @@ enum AuthenticationError: Error {
 enum EditUserBy {
     case name
     case password
+    case studentcode
 }
 
 public class UserOptions: UserOptionsDelegate {
@@ -32,7 +33,6 @@ public class UserOptions: UserOptionsDelegate {
     let folderPath = FileManager.default.currentDirectoryPath + "/json"
     let completePathUser = FileManager.default.currentDirectoryPath + "/json/user.txt"
     let encrypter = ServiceEncrypter<User>()
-    let service = FileService<User>()
     let currentUser = CurrentUser.instance
     
     /* Mostra os detalhes e informações da conta logada */
@@ -53,11 +53,17 @@ public class UserOptions: UserOptionsDelegate {
     func editInformation(edit: EditUserBy, newValue: String) {
         let editedUser = currentUser
         
+        print(editedUser.username)
+        print(editedUser.matricula)
+        print(editedUser.id)
+        
         switch edit {
         case .name:
             editedUser.nome = newValue
         case .password:
             editedUser.senha = newValue.md5()
+        case .studentcode:
+            editedUser.matricula = newValue
         }
         
         if editedUser.isLogged {
@@ -67,7 +73,6 @@ public class UserOptions: UserOptionsDelegate {
         } else {
             print("Por favor, realize o login primeiro!")
         }
-        print("finish!")
     }
     
     /* Salva as informações e realiza a criptografia dos dados do usuário */
@@ -75,7 +80,7 @@ public class UserOptions: UserOptionsDelegate {
         
         if usernameIsAvailable(username) {
             let user = User(username: username, nome: nome, matricula: matricula, senha: password)
-            user.id = service.autoIncrement(path: completePathUser)
+            user.id = encrypter.increment(path: completePathUser)
             encrypter.saveEcrypted(object: user, folderPath: folderPath, fileName: "user.txt")
         } else {
             print("Erro: Username indisponivel")

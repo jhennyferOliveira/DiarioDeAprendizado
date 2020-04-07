@@ -30,9 +30,22 @@ public final class ServiceEncrypter<Type: Codable & Incrementable> {
             let encrypted = try jsonData.encrypt(cipher: aes)
             try encrypted.write(to: URL(fileURLWithPath: filePath))
         } catch {
-            // print(error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
+    
+    func increment(path: String) -> Int {
+           let array = readEncrypted(filePath: path)
+           let lengthArray = array.count
+           var id = 0
+           if(lengthArray == 0) {
+               id = 1
+               return id
+           } else {
+               id = array[lengthArray - 1].id + 1
+               return id
+           }
+       }
     
     func saveEcrypted(object: Type, folderPath: String, fileName: String? = nil) {
         var filePath = folderPath
@@ -65,7 +78,7 @@ public final class ServiceEncrypter<Type: Codable & Incrementable> {
                 arrayType = try decoder.decode([Type].self, from: decrypted)
                 return arrayType
             } catch {
-                // print(error.localizedDescription)
+                 print(error.localizedDescription)
             }
         }
         return arrayType

@@ -113,7 +113,16 @@ public class ScreenUser {
         }
         let hash = password.md5()
         delegate?.saveInformation(nome: nome, username: username, matricula: matricula, password: hash)
+        utils.system("clear")
         
+        print("usuario cadastrado com sucesso, tente visualizar os seus dados!")
+        
+        // realiza o login automaticamente.
+        let result = delegate?.checkInformation(username: username, password: hash)
+        
+        if result == true {
+            CurrentUser.instance.isLogged = true
+        }
     }
     
     /* Solicita username e senha para realizar a autenticação */
