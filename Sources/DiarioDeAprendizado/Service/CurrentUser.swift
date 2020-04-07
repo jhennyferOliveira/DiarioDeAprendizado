@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class CurrentUser: User {
+public class CurrentUser: User {
     
     static var instance = CurrentUser()
     var isLogged = false

@@ -2,9 +2,9 @@
   {
     "id" : 1,
     "titulo" : "Cisco",
-    "texto" : "Este e o novo texto",
+    "texto" : "nove teso",
     "data" : "01-04-2020",
-    "categoria" : "faculdade",
+    "categoria" : "Carros",
     "disciplina" : {
       "nota1" : "-",
       "id" : 2,

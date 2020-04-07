@@ -1,11 +1,5 @@
 [
   {
-    "nota1" : "10",
-    "id" : 1,
-    "nome" : "mateus",
-    "nota2" : "10"
-  },
-  {
     "nota1" : "-",
     "id" : 2,
     "nome" : "matematica",

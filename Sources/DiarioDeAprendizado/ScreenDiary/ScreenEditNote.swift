@@ -15,7 +15,7 @@ class ScreenEditNote {
     func showSubmenuEdit() {
         print("""
 
-        O que você deseja editar?:
+        O que você deseja editar?
 
         1 - Título
         2 - Texto
@@ -38,6 +38,7 @@ class ScreenEditNote {
         while let input = readLine() {
             
             guard input != "0" else {
+                utils.system("clear")
                 break
             }
             
